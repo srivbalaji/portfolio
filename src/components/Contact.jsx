@@ -1,0 +1,60 @@
+import { motion } from 'framer-motion'
+import { profile } from '../data/resume'
+
+export default function Contact() {
+  const links = [
+    { label: 'EMAIL', href: `mailto:${profile.email}`, icon: '✉' },
+    { label: 'LINKEDIN', href: profile.linkedin, icon: '◉' },
+    { label: 'GITHUB', href: profile.github, icon: '◇' },
+    { label: 'RESUME', href: '/Srivatsan_Balaji_Resume.pdf', icon: '▣', download: true },
+  ]
+
+  return (
+    <section id="contact" className="py-24 px-6 md:px-12 lg:pl-32 pb-32">
+      <div className="max-w-4xl mx-auto text-center">
+        <motion.p className="hud-text text-gold mb-2" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+          COMM LINK
+        </motion.p>
+        <motion.h2 className="section-title mb-8" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+          CONNECT
+        </motion.h2>
+
+        <motion.div
+          className="grid sm:grid-cols-2 gap-4 mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          {links.map((link, i) => (
+            <motion.a
+              key={link.label}
+              href={link.href}
+              target={link.label !== 'EMAIL' && link.label !== 'RESUME' ? '_blank' : undefined}
+              rel="noopener noreferrer"
+              download={link.download}
+              className="p3-panel hover-pop p-6 flex items-center justify-center gap-4 group"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+            >
+              <span className="font-display text-2xl text-cyan group-hover:text-ice transition-colors">
+                {link.icon}
+              </span>
+              <span className="font-ui text-lg tracking-[0.3em] text-ice/80 group-hover:text-cyan transition-colors">
+                {link.label}
+              </span>
+            </motion.a>
+          ))}
+        </motion.div>
+
+        <motion.p className="hud-text text-ice/40" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+          {profile.location} · {profile.phone}
+        </motion.p>
+        <motion.p className="mt-8 font-display text-sm text-cyan/40 tracking-[0.5em]" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+          END TRANSMISSION
+        </motion.p>
+      </div>
+    </section>
+  )
+}

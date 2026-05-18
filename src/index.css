@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-void text-ice font-body antialiased overflow-x-hidden;
+    background-color: #060b14;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(61, 232, 255, 0.1), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 50%, rgba(155, 123, 255, 0.05), transparent),
+      linear-gradient(180deg, #060b14 0%, #0c1528 45%, #080e18 100%);
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: rgba(61, 232, 255, 0.35);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .p3-panel {
+    @apply relative bg-panel/90 border border-cyan/25 backdrop-blur-md;
+    box-shadow:
+      0 0 0 1px rgba(61, 232, 255, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 24px 48px rgba(0, 0, 0, 0.45);
+  }
+
+  .p3-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3de8ff, transparent);
+    opacity: 0.6;
+  }
+
+  .gundam-stripe {
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 4px,
+      rgba(196, 30, 58, 0.15) 4px,
+      rgba(196, 30, 58, 0.15) 8px
+    );
+  }
+
+  .hud-text {
+    @apply font-ui uppercase tracking-[0.2em] text-cyan/80 text-xs;
+  }
+
+  .section-title {
+    @apply font-display text-3xl md:text-4xl font-bold tracking-wider text-ice;
+    text-shadow: 0 0 40px rgba(61, 232, 255, 0.35);
+  }
+
+  .metaphor-divider {
+    @apply h-px w-full my-8;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(232, 197, 71, 0.4) 20%,
+      rgba(61, 232, 255, 0.5) 50%,
+      rgba(155, 123, 255, 0.4) 80%,
+      transparent
+    );
+  }
+
+  /* Panel pop-out on hover */
+  .hover-pop {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-pop:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+      0 0 0 1px rgba(61, 232, 255, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 20px 50px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba(61, 232, 255, 0.12);
+    border-color: rgba(61, 232, 255, 0.45);
+    z-index: 20;
+  }
+
+  .hover-pop-subtle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(61, 232, 255, 0.1);
+  }
+}
+
+/* Scanline overlay */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  opacity: 0.4;
+}
+
+/* Radar */
+.radar-wrap {
+  touch-action: manipulation;
+}
+
+.radar-blip:hover circle:nth-of-type(2),
+.radar-blip:focus-visible circle:nth-of-type(2) {
+  filter: drop-shadow(0 0 8px rgba(107, 255, 184, 0.8));
+}
+
+.radar-blip[aria-current='true'] circle:nth-of-type(2) {
+  filter: drop-shadow(0 0 10px rgba(255, 77, 106, 0.9));
+}
+
+@media (max-width: 767px) {
+  .radar-blip-label {
+    font-size: 8px;
+  }
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(61, 232, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61, 232, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
