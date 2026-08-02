@@ -138,6 +138,21 @@
     filter: drop-shadow(0 0 18px rgba(196, 30, 58, 0.25));
   }
 
+  /* Mobile — radar docked on mech viewport */
+  .section-radar-dock {
+    filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.55));
+  }
+
+  .section-radar-dock::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 4px;
+    background: rgba(6, 8, 14, 0.72);
+    border: 1px solid rgba(61, 232, 255, 0.15);
+    z-index: -1;
+  }
+
   /* Cockpit section room */
   .cockpit-grid {
     display: grid;

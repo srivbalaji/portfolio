@@ -134,7 +134,7 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
           <span className="font-display text-base sm:text-lg md:text-xl text-ice tracking-wider truncate">{profile.name.split(' ')[0]}</span>
           <span className="hidden sm:inline font-mono text-[9px] text-gundam/50 tracking-[0.25em]">PILOT · UM-AA</span>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[9px] text-cyan/50 pr-[5.25rem] sm:pr-[6.5rem] md:pr-[9.5rem] shrink-0">
+        <div className="flex items-center gap-2 font-mono text-[9px] text-cyan/50 lg:pr-[9.5rem] shrink-0">
           <span className="text-gundam animate-pulse">●</span>
           <span>{activeMeta?.label ?? 'Home'}</span>
         </div>
@@ -213,6 +213,7 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
             onHoloClose={closeHoloChannel}
             onHoloOpen={followHoloChannel}
           />
+          {isCompact && <SectionRadar active={active} onNavigate={navigate} dock />}
           <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 left-2 sm:left-3 z-30 flex justify-between items-end pointer-events-none gap-2">
             <span className="font-mono text-[7px] sm:text-[8px] text-gundam/40 tracking-widest uppercase truncate max-lg:max-w-[45%]">
               Ext. · {activeMeta?.label}
