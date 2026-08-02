@@ -11,9 +11,9 @@ const fade = {
   }),
 }
 
-export default function About() {
+export default function About({ embedded }) {
   return (
-    <section id="about" className="py-24 px-6 md:px-12 lg:pl-32 max-w-5xl mx-auto">
+    <section id="about" className={embedded ? 'pb-8' : 'py-24 px-6 md:px-12 lg:pl-32 max-w-5xl mx-auto'}>
       <motion.p className="hud-text text-gold mb-2" variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={0}>
         PROFILE DATA
       </motion.p>
@@ -22,7 +22,7 @@ export default function About() {
       </motion.h2>
       <motion.div className="metaphor-divider" variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={2} />
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className={`grid gap-6 ${embedded ? 'grid-cols-1' : 'md:grid-cols-2 gap-8'}`}>
         <motion.div className="p3-panel hover-pop p-8" variants={fade} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={3}>
           <p className="text-ice/80 leading-relaxed mb-6">
             I'm a {education.degree} student at {education.school} with a minor in {education.minor}.

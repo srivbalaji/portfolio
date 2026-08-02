@@ -4,6 +4,8 @@ export const profile = {
   phone: '(248) 295-1773',
   linkedin: 'https://linkedin.com/in/srivb70',
   github: 'https://github.com/srivbalaji',
+  portfolio: 'https://sbalaji.vercel.app',
+  resumeUrl: '/Srivatsan_Balaji_Resume.pdf',
   location: 'Ann Arbor, MI',
   tagline: 'Embedded Systems · Robotics · Firmware',
   subtitle: 'Computer Engineering @ University of Michigan',
@@ -11,7 +13,7 @@ export const profile = {
   graduation: 'May 2028',
   minor: 'Mathematics',
   statement:
-    'Building firmware and systems that move in the real world — swarm robotics, high-voltage EV controls, and low-power embedded hardware.',
+    'Building firmware and systems that move in the real world — SoC bring-up, heterogeneous multicore, robotics, and high-voltage embedded controls.',
   interests: [
     'Travel & food',
     'Fantasy novels',
@@ -37,10 +39,15 @@ export const education = {
   coursework: [
     'Data Structures & Algorithms',
     'Digital Logic Design',
-    'Discrete Math',
-    'Differential Equations',
+    'Discrete Mathematics',
     'Linear Algebra',
     'Multivariable Calculus',
+    'Differential Equations',
+  ],
+  inProgress: [
+    'EECS 370 — Computer Organization',
+    'EECS 471 — Applied Parallel Programming (GPUs/CUDA)',
+    'EECS 470 — Computer Architecture (Winter 2027)',
   ],
 }
 
@@ -52,9 +59,10 @@ export const experience = [
     location: 'San Jose, CA',
     period: 'May 2026 – Aug 2026',
     points: [
-      'Develop embedded firmware in C/C++ for IoT asset-tracking devices supporting enterprise shipping networks',
-      'Collaborate with hardware teams to debug communication, optimize power usage, and improve reliability',
-      'Integrate BLE and LoRa with ARM-based microcontrollers and onboard sensors for low-power, long-range tracking',
+      'Brought up Cortex-M7 on NXP i.MX 8M Plus under Linux remoteproc — end-to-end RPMsg/OpenAMP across resource-table placement, virtio vring, and MU doorbell handshake',
+      'Reduced sustained suspend current from 78.9 mA to 73.5 mA (~7% below Linux suspend floor) via PCA9450C PMIC standby programming and per-rail cut-safety mapping',
+      'Root-caused four heterogeneous-boot failures across device tree and firmware: ELF load-address mismatch, memory-region ordering, compatible string, and FreeRTOS tick/clock mismatch',
+      'Isolated a kernel-side mailbox defect by control experiment on imx_rproc.c / imx-mailbox.c; brought six I2C/ADC sensors online on Opulinks OPL1800 (Cortex-M3)',
     ],
   },
   {
@@ -64,8 +72,8 @@ export const experience = [
     location: 'Ann Arbor, MI',
     period: 'Jan 2026 – Present',
     points: [
-      'Optimize embedded firmware on Raspberry Pi through a HAL to reduce real-time latency in robotics',
-      'Deploy and validate FreeRTOS code, electronic components, and NFC interfaces with system-level testing',
+      'Optimize embedded firmware on Raspberry Pi through a HAL to reduce real-time latency in robotics applications',
+      'Deploy and validate FreeRTOS code and NFC interfaces with system-level testing',
       'Develop firmware and CAN control algorithms in C/C++ for wheel-legged kinematics',
     ],
   },
@@ -76,9 +84,9 @@ export const experience = [
     location: 'Ann Arbor, MI',
     period: 'Sep 2025 – Jan 2026',
     points: [
-      'Test and validate high-voltage embedded control systems; use Altium for schematic and PCB tests',
-      'Develop microcontroller firmware in C for real-time BMS communication over CAN bus',
-      'Engineered an integrated isolation board improving safety, robustness, and fault tolerance',
+      'Developed microcontroller firmware in C for real-time BMS communication over CAN bus',
+      'Engineered an integrated isolation board improving safety, robustness, and fault tolerance against circuit leaks',
+      'Validated high-voltage control systems using Altium for schematic and PCB review',
     ],
   },
   {
@@ -88,8 +96,8 @@ export const experience = [
     location: 'Novi, MI',
     period: 'Jul 2025 – Aug 2025',
     points: [
-      'Developed C++ programs to automate financial modeling (FCFE, EBITDA, DCF), reducing analysis time by 70%',
-      'Built reusable valuation libraries for equity-based transaction workflows',
+      'Developed C++ programs automating financial modeling (FCFE, EBITDA, DCF), cutting analysis time by 70%',
+      'Built reusable valuation libraries to streamline equity-based transaction workflows',
       'Researched market trends and comparable companies to support VC deals',
     ],
   },
@@ -97,32 +105,35 @@ export const experience = [
 
 export const projects = [
   {
-    id: 'sensor-logger',
-    title: 'Low-Power Embedded Sensor Logger',
+    id: 'thread-scheduler',
+    title: 'User-Space Thread Scheduler',
     status: 'ONGOING',
     description:
-      'STM32 firmware logging accelerometer and temperature data with aggressive power optimization.',
-    tech: ['C/C++', 'STM32', 'Deep Sleep', 'SD Card', 'UART/BLE'],
+      'User-space threading library with cooperative and preemptive multitasking — context switching in raw x86-64 assembly without std::thread.',
+    tech: ['C++17', 'x86-64 Assembly', 'std::atomic', 'Lock-free'],
     details: [
-      'Targeting <5% CPU utilization via interrupt-driven firmware and peripheral clock gating',
-      'Integrating SD storage and UART/Bluetooth for real-time logging and offline analysis',
+      'Context switching saves/restores callee-saved registers, instruction pointer, and stack pointers',
+      'Mutexes, spinlocks, condition variables, and lock-free SPSC ring buffer for inter-thread messaging',
+      'Work-stealing thread pool benchmarked against std::thread across task granularity and core counts',
     ],
-    image: '/assets/projects/sensor-logger.jpg',
-    imageAlt: 'Sensor logger project',
+    image: '/assets/projects/thread-scheduler.jpg',
+    imageAlt: 'User-space thread scheduler project',
   },
   {
-    id: 'bluetooth-hw',
-    title: 'Embedded Bluetooth Hardware',
+    id: 'portfolio-site',
+    title: 'Gundam Cockpit Portfolio',
     status: 'COMPLETE',
+    url: 'https://sbalaji.vercel.app',
     description:
-      'Custom Bluetooth transmitter for a Sony NWE-505 MP3 player — portable wireless audio from legacy hardware.',
-    tech: ['Embedded C', 'PCB Design', 'BLE', 'Power Optimization'],
+      'Interactive Persona-inspired portfolio with 3D Freedom Gundam hangar intro, cockpit HUD overlays, and sector-based navigation.',
+    tech: ['React', 'Three.js', 'Vite', 'Tailwind', 'Framer Motion'],
     details: [
-      'Designed custom PCB layout and microcontroller firmware for wireless audio streaming',
-      'Low-power communication system for battery efficiency and signal stability',
+      'Unified mech viewport with per-section camera presets and semi-transparent cockpit monitors',
+      'Boot sequence with hyperspace warp effect and click-to-initialize pilot link flow',
+      'Deployed at sbalaji.vercel.app',
     ],
-    image: '/assets/projects/bluetooth-hw.jpg',
-    imageAlt: 'Bluetooth hardware project',
+    image: '/assets/projects/portfolio-site.jpg',
+    imageAlt: 'Portfolio website project',
   },
   {
     id: 'spectrum',
@@ -133,71 +144,48 @@ export const projects = [
     tech: ['Embedded C', 'STM32', 'FFT', 'OLED', 'Fixed-Point'],
     details: [
       'Reduced latency 30% through fixed-point arithmetic and optimized buffer management',
-      'Designed UI demonstrating real-time DSP on microcontroller platform',
+      'Developed FFT-based signal processing to visualize frequency spectrum on OLED display',
     ],
     image: '/assets/projects/spectrum.jpg',
     imageAlt: 'Audio spectrum visualizer',
   },
-  {
-    id: 'atombot-swarm',
-    title: 'Atombot Lab — Swarm Robotics',
-    status: 'ACTIVE',
-    description:
-      'Swarm robotics research: embedded systems, coordination, and performance-critical firmware.',
-    tech: ['C/C++', 'FreeRTOS', 'CAN', 'Raspberry Pi', 'Robotics'],
-    details: [
-      'HAL optimization for real-time latency',
-      'CAN control for wheel-legged kinematics',
-    ],
-    image: '/assets/projects/atombot.jpg',
-    imageAlt: 'Atombot swarm robotics',
-  },
-  {
-    id: 'spark-ev',
-    title: 'SPARK Electric Racing',
-    status: 'COMPLETE',
-    description:
-      'High-voltage embedded systems for electric racing — BMS, CAN, and isolation hardware.',
-    tech: ['C', 'CAN', 'BMS', 'Altium', 'High Voltage'],
-    details: [
-      'Firmware for real-time BMS communication',
-      'Isolation board for circuit leak protection',
-    ],
-    image: '/assets/projects/spark.jpg',
-    imageAlt: 'SPARK electric racing',
-  },
-  {
-    id: 'cad-pen',
-    title: 'CAD Reverse Engineering',
-    status: 'SIDE',
-    description: 'Reverse-engineered a ballpoint pen in CAD for practice — form, fit, and modeling fundamentals.',
-    tech: ['CAD', 'Solid Modeling'],
-    details: ['Personal practice project from portfolio showcase'],
-    image: '/assets/projects/cad-pen.jpg',
-    imageAlt: 'CAD pen model',
-  },
 ]
 
 export const skills = {
-  languages: ['C++', 'C', 'Python', 'Java', 'JavaScript', 'Verilog'],
+  languages: ['C', 'C++', 'Python', 'Verilog', 'ARM Assembly', 'Java', 'JavaScript'],
+  systems: [
+    'SoC Bring-up',
+    'Linux BSP',
+    'Device Tree',
+    'remoteproc',
+    'RPMsg/OpenAMP',
+    'FreeRTOS',
+    'Zephyr',
+    'Yocto',
+    'U-Boot',
+    'PSCI/TF-A',
+  ],
   hardware: [
-    'ESP32',
+    'i.MX 8M Plus',
     'STM32',
+    'ESP32',
+    'Cortex-A53/M7/M3',
     'I2C',
+    'SPI',
     'UART',
     'CAN',
+    'ADC',
     'FPGA',
     'Altium',
-    'Git',
-    'Jira',
   ],
+  tools: ['Keil MDK', 'ARM GNU', 'CMake/Ninja', 'Git', 'Jira', 'GDB', 'WSL2', 'dtc'],
 }
 
 export const navLinks = [
-  { id: 'hero', label: 'HOME', icon: '◈' },
-  { id: 'about', label: 'PROFILE', icon: '◇' },
-  { id: 'projects', label: 'MISSIONS', icon: '▣' },
-  { id: 'experience', label: 'LOG', icon: '▤' },
-  { id: 'skills', label: 'SYSTEM', icon: '◎' },
-  { id: 'contact', label: 'LINK', icon: '◉' },
+  { id: 'hero', label: 'Home', icon: '◈' },
+  { id: 'about', label: 'About', icon: '◇' },
+  { id: 'projects', label: 'Projects', icon: '▣' },
+  { id: 'experience', label: 'Experience', icon: '▤' },
+  { id: 'skills', label: 'Skills', icon: '◎' },
+  { id: 'contact', label: 'Contact', icon: '◉' },
 ]

@@ -1,0 +1,18 @@
+# 3D Model Credits
+
+## MS Gundam RX-78-2 with weapons
+
+- **Author:** Tipatat Chennavasin
+- **License:** Creative Commons Attribution 3.0 (CC BY 3.0)
+- **Source:** [Icosa Gallery — fHalccv7ORh](https://icosa.gallery/view/fHalccv7ORh)
+- **Original platform:** Google Poly (archived via Icosa Foundation / Archive Team)
+
+Attribution required when sharing or redistributing this model.
+
+Files in this folder (`model.gltf`, `model.bin`) were downloaded from the Icosa Gallery CDN for local bundling.
+
+To re-download:
+
+```bash
+npm run fetch-model
+```

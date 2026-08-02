@@ -9,26 +9,27 @@
 
   body {
     @apply bg-void text-ice font-body antialiased overflow-x-hidden;
-    background-color: #060b14;
+    background-color: #080610;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(61, 232, 255, 0.1), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 50%, rgba(155, 123, 255, 0.05), transparent),
-      linear-gradient(180deg, #060b14 0%, #0c1528 45%, #080e18 100%);
+      radial-gradient(ellipse 70% 45% at 50% -15%, rgba(196, 30, 58, 0.14), transparent),
+      radial-gradient(ellipse 50% 40% at 100% 30%, rgba(61, 232, 255, 0.07), transparent),
+      radial-gradient(ellipse 40% 35% at 0% 70%, rgba(196, 30, 58, 0.08), transparent),
+      linear-gradient(180deg, #080610 0%, #0c0a14 45%, #060810 100%);
     min-height: 100vh;
   }
 
   ::selection {
-    background: rgba(61, 232, 255, 0.35);
+    background: rgba(196, 30, 58, 0.4);
     color: #fff;
   }
 }
 
 @layer components {
   .p3-panel {
-    @apply relative bg-panel/90 border border-cyan/25 backdrop-blur-md;
+    @apply relative bg-panel/90 border border-gundam/20 backdrop-blur-md;
     box-shadow:
-      0 0 0 1px rgba(61, 232, 255, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 0 1px rgba(196, 30, 58, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
       0 24px 48px rgba(0, 0, 0, 0.45);
   }
 
@@ -39,8 +40,8 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #3de8ff, transparent);
-    opacity: 0.6;
+    background: linear-gradient(90deg, transparent, #c41e3a, #3de8ff, transparent);
+    opacity: 0.65;
   }
 
   .gundam-stripe {
@@ -59,7 +60,7 @@
 
   .section-title {
     @apply font-display text-3xl md:text-4xl font-bold tracking-wider text-ice;
-    text-shadow: 0 0 40px rgba(61, 232, 255, 0.35);
+    text-shadow: 0 0 40px rgba(196, 30, 58, 0.25), 0 0 20px rgba(61, 232, 255, 0.15);
   }
 
   .metaphor-divider {
@@ -67,9 +68,10 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(232, 197, 71, 0.4) 20%,
-      rgba(61, 232, 255, 0.5) 50%,
-      rgba(155, 123, 255, 0.4) 80%,
+      rgba(196, 30, 58, 0.45) 15%,
+      rgba(232, 197, 71, 0.35) 35%,
+      rgba(61, 232, 255, 0.4) 55%,
+      rgba(196, 30, 58, 0.35) 80%,
       transparent
     );
   }
@@ -93,6 +95,223 @@
   .hover-pop-subtle:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(61, 232, 255, 0.1);
+  }
+
+  .shell-layout {
+    @apply bg-void text-ice;
+    background-image:
+      radial-gradient(ellipse 55% 40% at 0% 40%, rgba(196, 30, 58, 0.06), transparent),
+      radial-gradient(ellipse 50% 35% at 100% 60%, rgba(61, 232, 255, 0.04), transparent),
+      linear-gradient(180deg, #080610 0%, #0a0812 100%);
+  }
+
+  .shell-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(61, 232, 255, 0.25) transparent;
+  }
+
+  .shell-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .shell-scroll::-webkit-scrollbar-thumb {
+    background: rgba(61, 232, 255, 0.25);
+    border-radius: 2px;
+  }
+
+  .mech-panel canvas {
+    display: block;
+  }
+
+  .section-radar {
+    touch-action: manipulation;
+    filter: drop-shadow(0 0 12px rgba(61, 232, 255, 0.15));
+  }
+
+  .section-radar:hover {
+    filter: drop-shadow(0 0 18px rgba(196, 30, 58, 0.25));
+  }
+
+  /* Cockpit section room */
+  .cockpit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto auto;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .cockpit-grid {
+      grid-template-columns: 1fr 140px;
+      grid-template-rows: 1fr 100px;
+      gap: 0.625rem;
+    }
+
+    .cockpit-monitor.primary {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .cockpit-monitor.aux:nth-of-type(1) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .cockpit-monitor.aux:nth-of-type(2) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
+
+  .cockpit-monitor {
+    @apply relative border bg-[#060a12]/80 backdrop-blur-sm overflow-hidden;
+    border-color: rgba(196, 30, 58, 0.25);
+    box-shadow: inset 0 0 20px rgba(196, 30, 58, 0.04), 0 4px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  .cockpit-monitor.primary {
+    min-height: 0;
+  }
+
+  .monitor-label {
+    @apply font-mono text-[8px] md:text-[9px] tracking-[0.2em] uppercase px-2 py-1 border-b border-gundam/15 bg-gundam/5;
+  }
+
+  .monitor-screen {
+    @apply relative overflow-hidden;
+  }
+
+  .primary-screen {
+    height: calc(100% - 24px);
+    max-height: 100%;
+  }
+
+  .aux-screen {
+    @apply p-2;
+    min-height: 72px;
+  }
+
+  .cockpit-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(196, 30, 58, 0.35) transparent;
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  .cockpit-scroll::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .cockpit-scroll::-webkit-scrollbar-thumb {
+    background: rgba(196, 30, 58, 0.35);
+  }
+
+  .cockpit-content section {
+    @apply pb-4;
+  }
+
+  .cockpit-content .section-title {
+    @apply text-xl md:text-2xl mb-2;
+  }
+
+  .cockpit-content .metaphor-divider {
+    @apply my-4;
+  }
+
+  .cockpit-content .p3-panel {
+    @apply bg-[#080c14]/60 border-gundam/15 shadow-none;
+  }
+
+  .cockpit-content .hud-text {
+    @apply text-gundam/75;
+  }
+
+  .viewport-cockpit-grid {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 0.5rem;
+    min-height: 0;
+  }
+
+  .viewport-cockpit-grid.experience-layout {
+    grid-template-rows: auto 1fr;
+  }
+
+  .viewport-cockpit-grid.experience-layout .experience-primary {
+    min-height: 0;
+    max-height: 52px;
+  }
+
+  .viewport-cockpit-grid.experience-layout .experience-primary .monitor-screen {
+    min-height: 0;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .viewport-cockpit-grid.experience-layout .experience-primary .monitor-label {
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+    font-size: 7px;
+  }
+
+  .viewport-aux-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .viewport-primary {
+    min-height: 80px;
+  }
+
+  .viewport-aux-grid .cockpit-monitor.aux {
+    min-height: 64px;
+  }
+
+  .viewport-aux-grid.experience-aux {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(210px, 1fr);
+    gap: 0.35rem;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .viewport-aux-grid.experience-aux .cockpit-monitor.aux-roles {
+    min-height: 0;
+  }
+
+  .viewport-aux-grid.experience-aux .cockpit-monitor.aux-roles .monitor-screen {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .viewport-aux-grid.experience-aux .cockpit-monitor.aux-timeline {
+    min-height: 210px;
+    flex: 1;
+  }
+
+  .viewport-aux-grid.experience-aux .cockpit-monitor.aux-timeline .monitor-screen {
+    min-height: 190px;
+    overflow: hidden;
+  }
+
+  .experience-timeline .monitor-screen,
+  .experience-timeline {
+    height: 100%;
+  }
+
+  .viewport-cockpit-grid.contact-holo-layout {
+    grid-template-rows: 1fr auto;
+  }
+
+  .viewport-cockpit-grid.contact-holo-layout .contact-holo-primary {
+    min-height: 140px;
+    flex: 1;
+  }
+
+  .viewport-cockpit-grid.contact-holo-layout .contact-holo-primary .monitor-screen {
+    flex: 1;
+    min-height: 110px;
   }
 }
 
@@ -139,4 +358,100 @@
     linear-gradient(rgba(61, 232, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(61, 232, 255, 0.03) 1px, transparent 1px);
   background-size: 48px 48px;
+}
+
+/* Holographic transmission overlay */
+.holo-transmission-screen {
+  box-shadow:
+    0 0 24px rgba(61, 232, 255, 0.15),
+    inset 0 0 30px rgba(61, 232, 255, 0.06);
+}
+
+.holo-transmission-image {
+  animation: holo-flicker 0.11s steps(2) infinite, holo-shake 0.14s infinite;
+  filter: saturate(1.15) contrast(1.05);
+}
+
+.holo-transmission-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(61, 232, 255, 0.07) 2px,
+    rgba(61, 232, 255, 0.07) 4px
+  );
+  animation: holo-scan 3s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.holo-transmission-glitch {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(61, 232, 255, 0.08) 45%,
+    rgba(196, 30, 58, 0.06) 55%,
+    transparent 100%
+  );
+  animation: holo-glitch-band 2.4s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes holo-flicker {
+  0% { opacity: 0.72; }
+  25% { opacity: 0.95; }
+  50% { opacity: 0.58; }
+  75% { opacity: 0.88; }
+  100% { opacity: 0.65; }
+}
+
+@keyframes holo-shake {
+  0%, 100% { transform: translate(0, 0) skewX(0deg); }
+  15% { transform: translate(-2px, 1px) skewX(-0.4deg); }
+  30% { transform: translate(2px, -1px) skewX(0.5deg); }
+  45% { transform: translate(-1px, -2px) skewX(-0.2deg); }
+  60% { transform: translate(3px, 1px) skewX(0.3deg); }
+  75% { transform: translate(-2px, 0) skewX(-0.35deg); }
+}
+
+@keyframes holo-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes holo-glitch-band {
+  0%, 100% { transform: translateX(-110%); opacity: 0.3; }
+  45% { transform: translateX(0%); opacity: 0.7; }
+  55% { transform: translateX(110%); opacity: 0.3; }
+}
+
+/* HUD drift telemetry trails */
+.hud-drift-line {
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 0 8px rgba(61, 232, 255, 0.35);
+}
+
+.hud-drift-trail {
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  filter: blur(0.5px);
+}
+
+.hud-drift-left .hud-drift-trail {
+  right: 100%;
+  width: 2.5rem;
+  margin-right: 2px;
+  background: linear-gradient(90deg, transparent, rgba(61, 232, 255, 0.05), rgba(61, 232, 255, 0.55));
+  box-shadow: -8px 0 12px rgba(61, 232, 255, 0.25);
+}
+
+.hud-drift-right .hud-drift-trail {
+  left: 100%;
+  width: 2.5rem;
+  margin-left: 2px;
+  background: linear-gradient(270deg, transparent, rgba(61, 232, 255, 0.05), rgba(61, 232, 255, 0.55));
+  box-shadow: 8px 0 12px rgba(61, 232, 255, 0.25);
 }

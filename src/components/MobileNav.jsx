@@ -28,7 +28,7 @@ export default function MobileNav({ active, onNavigate }) {
               <span>{link.label.slice(0, 4)}</span>
             </motion.button>
             {!isLast && (
-              <motion.div
+              <div
                 className="w-px self-center h-8 bg-gradient-to-b from-transparent via-cyan/30 to-transparent shrink-0"
                 aria-hidden
               />

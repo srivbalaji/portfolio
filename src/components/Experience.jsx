@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 import { experience } from '../data/resume'
 
-export default function Experience() {
+export default function Experience({ embedded }) {
   return (
-    <section id="experience" className="py-24 px-6 md:px-12 lg:pl-32 max-w-4xl mx-auto">
+    <section id="experience" className={embedded ? 'pb-8' : 'py-24 px-6 md:px-12 lg:pl-32 max-w-4xl mx-auto'}>
       <motion.p className="hud-text text-gold mb-2" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
         COMBAT LOG
       </motion.p>
@@ -13,12 +13,13 @@ export default function Experience() {
       <motion.div className="metaphor-divider mb-12" />
 
       <motion.div className="relative">
-        <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-cyan via-atlas to-transparent" />
+        <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-cyan via-accent to-transparent" />
         <div className="space-y-8">
           {experience.map((job, i) => (
             <motion.div
               key={job.id}
-              className="relative pl-12"
+              id={`exp-${job.id}`}
+              className="relative pl-12 scroll-mt-6"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}

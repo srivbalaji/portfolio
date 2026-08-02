@@ -14,7 +14,9 @@ export default {
         alert: '#ff4d6a',
         hud: '#6bffb8',
         gundam: '#c41e3a',
-        atlas: '#9b7bff',
+        crimson: '#e8243a',
+        crimsonDim: '#8b1530',
+        accent: '#9b7bff',
       },
       fontFamily: {
         display: ['Orbitron', 'sans-serif'],

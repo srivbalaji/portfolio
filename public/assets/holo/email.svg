@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0a1420"/>
+  <rect x="40" y="40" width="720" height="520" fill="#101828" stroke="#3de8ff" stroke-width="2" opacity="0.5"/>
+  <text x="400" y="280" fill="#3de8ff" font-family="monospace" font-size="28" text-anchor="middle">EMAIL CHANNEL</text>
+  <text x="400" y="330" fill="#8898aa" font-family="monospace" font-size="16" text-anchor="middle">placeholder · replace with screenshot</text>
+</svg>

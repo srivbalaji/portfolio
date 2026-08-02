@@ -39,6 +39,16 @@ export default function ProjectCard({ project, index }) {
       <motion.div className="p-6">
         <h3 className="font-display text-xl text-ice mb-2 tracking-wide">{project.title}</h3>
         <p className="text-ice/70 text-sm leading-relaxed mb-4">{project.description}</p>
+        {project.url && (
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mb-3 font-mono text-[10px] tracking-wider text-cyan/70 hover:text-cyan border-b border-cyan/30 hover:border-cyan/60 transition-colors"
+          >
+            {project.url.replace(/^https?:\/\//, '')}
+          </a>
+        )}
         <div className="flex flex-wrap gap-2 mb-4">
           {project.tech.map((t) => (
             <span

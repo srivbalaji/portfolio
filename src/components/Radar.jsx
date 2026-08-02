@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { navLinks } from '../data/resume'
-import { useRadarSweep, SWEEP_DURATION_S } from '../hooks/useRadarSweep'
+import { useRadarSweep, SWEEP_DURATION_S, BLIP_RING_FACTORS } from '../hooks/useRadarSweep'
 
 const SIZE = 340
 const CX = SIZE / 2
@@ -12,22 +12,42 @@ const COLORS = {
   darkStroke: '#2d6b48',
   scanFill: '#5cff9b',
   scanStroke: '#b8ffd4',
-  scanGlow: 'rgba(92, 255, 155, 0.85)',
   activeFill: '#ff4d6a',
   activeStroke: '#ff8fa3',
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t
+}
+
+function hexToRgb(hex) {
+  const n = parseInt(hex.slice(1), 16)
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 }
+}
+
+function mixColor(c1, c2, t) {
+  const a = hexToRgb(c1)
+  const b = hexToRgb(c2)
+  const r = Math.round(lerp(a.r, b.r, t))
+  const g = Math.round(lerp(a.g, b.g, t))
+  const bVal = Math.round(lerp(a.b, b.b, t))
+  return `rgb(${r},${g},${bVal})`
 }
 
 function blipPosition(index, total) {
   const angleDeg = (360 / total) * index - 90
   const angleRad = (angleDeg * Math.PI) / 180
-  const r = RING_R * 0.72
+  const ringFactor = BLIP_RING_FACTORS[index % BLIP_RING_FACTORS.length]
+  const r = RING_R * ringFactor
   return {
     x: CX + r * Math.cos(angleRad),
     y: CY + r * Math.sin(angleRad),
   }
 }
 
-function BlipVisual({ x, y, isActive, isScanned, label }) {
+function BlipVisual({ x, y, isActive, intensity, label }) {
+  const t = Math.max(0, Math.min(1, intensity))
+
   if (isActive) {
     return (
       <>
@@ -60,52 +80,41 @@ function BlipVisual({ x, y, isActive, isScanned, label }) {
     )
   }
 
-  if (isScanned) {
-    return (
-      <>
-        <circle cx={x} cy={y} r={18} fill="none" stroke={COLORS.scanGlow} strokeWidth="2" opacity="0.7" />
-        <circle
-          cx={x}
-          cy={y}
-          r={8}
-          fill={COLORS.scanFill}
-          stroke={COLORS.scanStroke}
-          strokeWidth={2}
-          style={{ filter: `drop-shadow(0 0 12px ${COLORS.scanGlow})` }}
-        />
-        <text
-          x={x}
-          y={y + 24}
-          textAnchor="middle"
-          className="radar-blip-label pointer-events-none"
-          fill="rgba(184, 255, 210, 0.95)"
-          fontSize="10"
-          fontFamily="Rajdhani, sans-serif"
-          letterSpacing="0.12em"
-        >
-          {label}
-        </text>
-      </>
-    )
-  }
+  const fill = mixColor(COLORS.darkFill, COLORS.scanFill, t)
+  const stroke = mixColor(COLORS.darkStroke, COLORS.scanStroke, t)
+  const radius = lerp(6, 9, t)
+  const glowOpacity = t * 0.85
+  const labelOpacity = lerp(0.45, 0.95, t)
 
   return (
     <>
+      {t > 0.05 && (
+        <circle
+          cx={x}
+          cy={y}
+          r={lerp(10, 20, t)}
+          fill="none"
+          stroke={`rgba(92, 255, 155, ${glowOpacity * 0.5})`}
+          strokeWidth={lerp(0.5, 2, t)}
+        />
+      )}
       <circle
         cx={x}
         cy={y}
-        r={6}
-        fill={COLORS.darkFill}
-        stroke={COLORS.darkStroke}
-        strokeWidth={1.5}
-        opacity={0.95}
+        r={radius}
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={lerp(1.5, 2.5, t)}
+        style={{
+          filter: t > 0.05 ? `drop-shadow(0 0 ${lerp(2, 14, t)}px rgba(92, 255, 155, ${glowOpacity}))` : 'none',
+        }}
       />
       <text
         x={x}
         y={y + 24}
         textAnchor="middle"
         className="radar-blip-label pointer-events-none"
-        fill="rgba(45, 107, 72, 0.85)"
+        fill={`rgba(${lerp(45, 184, t)}, ${lerp(107, 255, t)}, ${lerp(72, 210, t)}, ${labelOpacity})`}
         fontSize="10"
         fontFamily="Rajdhani, sans-serif"
         letterSpacing="0.12em"
@@ -117,7 +126,7 @@ function BlipVisual({ x, y, isActive, isScanned, label }) {
 }
 
 function RadarSvg({ active, onNavigate }) {
-  const { isScanned } = useRadarSweep(26)
+  const { getIntensity } = useRadarSweep(22, 3000)
   const total = navLinks.length
 
   const handleBlipClick = (id) => (e) => {
@@ -161,14 +170,7 @@ function RadarSvg({ active, onNavigate }) {
           fill={`url(#${gradId})`}
           opacity="0.7"
         />
-        <line
-          x1={CX}
-          y1={CY}
-          x2={CX}
-          y2={CY - RING_R}
-          stroke="rgba(92, 255, 155, 0.75)"
-          strokeWidth="2"
-        />
+        <line x1={CX} y1={CY} x2={CX} y2={CY - RING_R} stroke="rgba(92, 255, 155, 0.75)" strokeWidth="2" />
         <animateTransform
           attributeName="transform"
           type="rotate"
@@ -205,7 +207,7 @@ function RadarSvg({ active, onNavigate }) {
       {navLinks.map((link, i) => {
         const { x, y } = blipPosition(i, total)
         const isActive = active === link.id
-        const scanned = isScanned(i, total)
+        const intensity = getIntensity(i, total)
 
         return (
           <g
@@ -224,13 +226,7 @@ function RadarSvg({ active, onNavigate }) {
             aria-current={isActive ? 'true' : undefined}
           >
             <circle cx={x} cy={y} r={22} fill="transparent" />
-            <BlipVisual
-              x={x}
-              y={y}
-              isActive={isActive}
-              isScanned={scanned}
-              label={link.label}
-            />
+            <BlipVisual x={x} y={y} isActive={isActive} intensity={intensity} label={link.label} />
           </g>
         )
       })}

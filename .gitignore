@@ -12,6 +12,21 @@ dist
 dist-ssr
 *.local
 
+# Environment & secrets — never commit tokens or API keys
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.production.local
+*.pem
+*.key
+credentials.json
+.secrets
+
+# Vercel local config (safe to ignore; project settings live on Vercel dashboard)
+.vercel
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
