@@ -153,6 +153,10 @@
     z-index: -1;
   }
 
+  .mobile-mech-split [role='separator']:active span:first-child {
+    @apply bg-cyan/70;
+  }
+
   /* Cockpit section room */
   .cockpit-grid {
     display: grid;

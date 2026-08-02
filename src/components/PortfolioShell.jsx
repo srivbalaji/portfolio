@@ -14,6 +14,7 @@ import Contact from './Contact'
 import { navLinks, profile, experience } from '../data/resume'
 import { CAMERA_NAV_DELAY_MS, CAMERA_TURN_MS } from '../config/mechModel'
 import { useCompactViewport, useFinePointer } from '../hooks/useCompactViewport'
+import MobileMechSplitHandle, { useMobileMechSplit } from './MobileMechSplit'
 
 const SECTIONS = {
   hero: Hero,
@@ -119,6 +120,7 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
   const activeMeta = navLinks.find(l => l.id === active)
   const isCompact = useCompactViewport()
   const finePointer = useFinePointer()
+  const { mechVh, startDrag, nudge, minVh, maxVh } = useMobileMechSplit(isCompact)
   const showViewportOverlay =
     overlayVisible &&
     active !== 'hero' &&
@@ -165,26 +167,40 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
           </ul>
         </nav>
 
-        <main className="flex-1 relative min-h-0 lg:min-h-0 overflow-hidden order-2 lg:order-none">
-          <div className="absolute inset-0 overflow-y-auto shell-scroll overscroll-y-contain px-3 sm:px-4 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8">
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={active}
-                custom={direction}
-                variants={panelVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                className="max-w-2xl"
-              >
-                <ActiveSection embedded onNavigate={navigate} onOpenHolo={openHoloChannel} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </main>
+        <div className="flex-1 flex flex-col min-h-0 lg:contents">
+          <main className="flex-1 relative min-h-[140px] lg:min-h-0 overflow-hidden order-2 lg:order-none">
+            <div className="absolute inset-0 overflow-y-auto shell-scroll overscroll-y-contain px-3 sm:px-4 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={active}
+                  custom={direction}
+                  variants={panelVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="max-w-2xl"
+                >
+                  <ActiveSection embedded onNavigate={navigate} onOpenHolo={openHoloChannel} />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </main>
 
-        <aside className="mech-panel relative shrink-0 order-3 h-[min(32vh,280px)] sm:h-[min(34vh,300px)] lg:h-auto lg:w-[44%] border-t lg:border-t-0 lg:border-l border-gundam/15 overflow-hidden">
+          {isCompact && (
+            <MobileMechSplitHandle
+              mechVh={mechVh}
+              minVh={minVh}
+              maxVh={maxVh}
+              onDragStart={startDrag}
+              onNudge={nudge}
+            />
+          )}
+
+          <aside
+            className="mech-panel relative shrink-0 order-3 lg:h-auto lg:w-[44%] border-t lg:border-t-0 lg:border-l border-gundam/15 overflow-hidden"
+            style={isCompact ? { height: `${mechVh}vh` } : undefined}
+          >
           <MechViewport
             cameraTarget={active}
             showHangar
@@ -221,6 +237,7 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
             <MechCredit compact className="hidden lg:block" />
           </div>
         </aside>
+        </div>
       </div>
     </div>
   )
