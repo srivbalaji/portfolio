@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import GundamHangar from './GundamHangar'
+import LinkEstablishedFrame from './LinkEstablishedFrame'
 
 /**
  * Intro flow:
@@ -70,7 +71,14 @@ export default function BootScreen({ onComplete, onNavigate }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <p className="font-display text-2xl text-cyan tracking-[0.5em] animate-pulse">LINK ESTABLISHED</p>
+          <LinkEstablishedFrame>
+            <p className="font-display text-2xl text-cyan tracking-[0.5em] animate-pulse px-4">
+              LINK ESTABLISHED
+            </p>
+            <p className="font-mono text-[9px] text-cyan/40 tracking-[0.35em] text-center mt-3">
+              NEURAL LINK · SYNC OK
+            </p>
+          </LinkEstablishedFrame>
         </motion.div>
       )}
 

@@ -360,7 +360,7 @@
   background-size: 48px 48px;
 }
 
-/* Holographic transmission overlay */
+/* Holographic transmission overlay — gentle pulse ~1×/sec, no rapid flicker */
 .holo-transmission-screen {
   box-shadow:
     0 0 24px rgba(61, 232, 255, 0.15),
@@ -368,49 +368,51 @@
 }
 
 .holo-transmission-image {
-  animation: holo-flicker 0.11s steps(2) infinite, holo-shake 0.14s infinite;
-  filter: saturate(1.15) contrast(1.05);
+  animation: holo-flicker 2.8s ease-in-out infinite;
+  filter: saturate(1.05) contrast(1.02);
 }
 
 .holo-transmission-scanlines {
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(61, 232, 255, 0.07) 2px,
-    rgba(61, 232, 255, 0.07) 4px
+    transparent 3px,
+    rgba(61, 232, 255, 0.04) 3px,
+    rgba(61, 232, 255, 0.04) 5px
   );
-  animation: holo-scan 3s linear infinite;
+  animation: holo-scan 6s linear infinite;
   mix-blend-mode: screen;
+  opacity: 0.5;
 }
 
 .holo-transmission-glitch {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(61, 232, 255, 0.08) 45%,
-    rgba(196, 30, 58, 0.06) 55%,
+    rgba(61, 232, 255, 0.05) 45%,
+    rgba(196, 30, 58, 0.04) 55%,
     transparent 100%
   );
-  animation: holo-glitch-band 2.4s ease-in-out infinite;
+  animation: holo-glitch-band 3.5s ease-in-out infinite;
   mix-blend-mode: screen;
+  opacity: 0.35;
 }
 
 @keyframes holo-flicker {
-  0% { opacity: 0.72; }
-  25% { opacity: 0.95; }
-  50% { opacity: 0.58; }
-  75% { opacity: 0.88; }
-  100% { opacity: 0.65; }
-}
-
-@keyframes holo-shake {
-  0%, 100% { transform: translate(0, 0) skewX(0deg); }
-  15% { transform: translate(-2px, 1px) skewX(-0.4deg); }
-  30% { transform: translate(2px, -1px) skewX(0.5deg); }
-  45% { transform: translate(-1px, -2px) skewX(-0.2deg); }
-  60% { transform: translate(3px, 1px) skewX(0.3deg); }
-  75% { transform: translate(-2px, 0) skewX(-0.35deg); }
+  0%, 92%, 100% {
+    opacity: 1;
+    filter: saturate(1.05) contrast(1.02);
+    transform: none;
+  }
+  94% {
+    opacity: 0.9;
+    filter: saturate(1.08) brightness(1.02);
+    transform: translateX(-0.5px);
+  }
+  97% {
+    opacity: 0.96;
+    transform: translateX(0.5px);
+  }
 }
 
 @keyframes holo-scan {
@@ -419,9 +421,9 @@
 }
 
 @keyframes holo-glitch-band {
-  0%, 100% { transform: translateX(-110%); opacity: 0.3; }
-  45% { transform: translateX(0%); opacity: 0.7; }
-  55% { transform: translateX(110%); opacity: 0.3; }
+  0%, 88%, 100% { transform: translateX(-110%); opacity: 0; }
+  92% { transform: translateX(0%); opacity: 0.45; }
+  96% { transform: translateX(110%); opacity: 0; }
 }
 
 /* HUD drift telemetry trails */

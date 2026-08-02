@@ -8,7 +8,10 @@ const CY = SIZE / 2
 const RING_R = SIZE / 2 - 18
 
 const COLORS = {
-  frame: 'rgba(196, 30, 58, 0.55)',
+  frameLight: '#9aa3ad',
+  frameMid: '#6a737d',
+  frameDark: '#3d454d',
+  frameEdge: '#2a3038',
   grid: 'rgba(61, 232, 255, 0.12)',
   sweep: 'rgba(107, 255, 184, 0.85)',
   active: '#ff4d6a',
@@ -110,17 +113,56 @@ function SquareRadarSvg({ active, onNavigate, hovered, setHovered }) {
   const { getIntensity } = useRadarSweep(24, 3200)
   const total = navLinks.length
   const gradId = useMemo(() => `radar-sweep-${Math.random().toString(36).slice(2, 8)}`, [])
+  const frameId = useMemo(() => `radar-frame-${Math.random().toString(36).slice(2, 8)}`, [])
+  const bevelId = useMemo(() => `radar-bevel-${Math.random().toString(36).slice(2, 8)}`, [])
 
   return (
     <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full h-full select-none">
       <defs>
+        <linearGradient id={frameId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor={COLORS.frameLight} />
+          <stop offset="45%" stopColor={COLORS.frameMid} />
+          <stop offset="100%" stopColor={COLORS.frameDark} />
+        </linearGradient>
+        <linearGradient id={bevelId} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.22)" />
+          <stop offset="55%" stopColor="rgba(255,255,255,0.04)" />
+          <stop offset="100%" stopColor="rgba(0,0,0,0.35)" />
+        </linearGradient>
         <linearGradient id={gradId} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="rgba(107, 255, 184, 0)" />
           <stop offset="100%" stopColor="rgba(107, 255, 184, 0.55)" />
         </linearGradient>
+        <filter id="radar-shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#000" floodOpacity="0.45" />
+        </filter>
       </defs>
 
-      <rect x={8} y={8} width={SIZE - 16} height={SIZE - 16} fill="rgba(6,10,18,0.8)" stroke={COLORS.frame} strokeWidth="1" rx={1} />
+      {/* metallic outer frame */}
+      <rect
+        x={4}
+        y={4}
+        width={SIZE - 8}
+        height={SIZE - 8}
+        rx={2}
+        fill={`url(#${frameId})`}
+        stroke={`url(#${frameId})`}
+        strokeWidth={3}
+        filter="url(#radar-shadow)"
+      />
+      <rect
+        x={4}
+        y={4}
+        width={SIZE - 8}
+        height={SIZE - 8}
+        rx={2}
+        fill={`url(#${bevelId})`}
+        stroke={COLORS.frameEdge}
+        strokeWidth={0.75}
+        opacity={0.85}
+      />
+
+      <rect x={10} y={10} width={SIZE - 20} height={SIZE - 20} fill="rgba(6,10,18,0.88)" stroke={COLORS.frameEdge} strokeWidth="0.5" rx={1} />
 
       {[0.35, 0.58, 0.82, 1].map((scale) => (
         <circle

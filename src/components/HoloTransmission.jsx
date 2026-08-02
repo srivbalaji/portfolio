@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
+import { profile } from '../data/resume'
 
 export const CHANNELS = {
   EMAIL: {
@@ -18,9 +19,41 @@ export const CHANNELS = {
   },
   RESUME: {
     label: 'RESUME DOCUMENT',
-    image: '/assets/holo/resume.svg',
-    fallback: 'RESUME · PDF TRANSMISSION',
+    type: 'pdf',
+    pdf: profile.resumeUrl,
+    fallback: 'Srivatsan Balaji · Firmware Resume',
   },
+}
+
+function HoloMedia({ meta, compact }) {
+  if (meta.type === 'pdf') {
+    return (
+      <iframe
+        src={`${meta.pdf}#toolbar=0&navpanes=0&view=FitH`}
+        title="Resume preview"
+        className="holo-transmission-image w-full h-full min-h-[80px] border-0 bg-[#0a1018]"
+      />
+    )
+  }
+
+  return (
+    <>
+      <img
+        src={meta.image}
+        alt=""
+        className="holo-transmission-image w-full h-full min-h-[80px] object-cover"
+        onError={(e) => {
+          e.currentTarget.style.display = 'none'
+          e.currentTarget.nextElementSibling?.classList.remove('hidden')
+        }}
+      />
+      <div className="hidden w-full h-full min-h-[80px] flex items-center justify-center bg-gradient-to-br from-[#0a1420] to-[#101828]">
+        <p className={`font-mono text-cyan/60 tracking-widest text-center px-3 ${compact ? 'text-[8px]' : 'text-xs'}`}>
+          {meta.fallback}
+        </p>
+      </div>
+    </>
+  )
 }
 
 export function HoloPanel({ channel, onClose, onOpen, compact = false }) {
@@ -40,21 +73,7 @@ export function HoloPanel({ channel, onClose, onOpen, compact = false }) {
       </p>
 
       <div className="holo-transmission-screen relative overflow-hidden border border-cyan/35 bg-[#060a12] flex-1 min-h-0">
-        <img
-          src={meta.image}
-          alt=""
-          className="holo-transmission-image w-full h-full min-h-[80px] object-cover"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none'
-            e.currentTarget.nextElementSibling?.classList.remove('hidden')
-          }}
-        />
-        <div className="hidden w-full h-full min-h-[80px] flex items-center justify-center bg-gradient-to-br from-[#0a1420] to-[#101828]">
-          <p className={`font-mono text-cyan/60 tracking-widest text-center px-3 ${compact ? 'text-[8px]' : 'text-xs'}`}>
-            {meta.fallback}
-            <span className="block mt-1 text-[7px] text-ice/35">PLACEHOLDER · REPLACE JPG</span>
-          </p>
-        </div>
+        <HoloMedia meta={meta} compact={compact} />
         <div className="holo-transmission-scanlines absolute inset-0 pointer-events-none" />
         <div className="holo-transmission-glitch absolute inset-0 pointer-events-none" />
       </div>

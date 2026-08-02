@@ -54,7 +54,7 @@ export const education = {
 export const experience = [
   {
     id: 'trackonomy',
-    title: 'Firmware Engineering Intern (Incoming)',
+    title: 'Firmware Engineering Intern',
     org: 'Trackonomy Systems',
     location: 'San Jose, CA',
     period: 'May 2026 – Aug 2026',
@@ -125,15 +125,17 @@ export const projects = [
     status: 'COMPLETE',
     url: 'https://sbalaji.vercel.app',
     description:
-      'Interactive Persona-inspired portfolio with 3D Freedom Gundam hangar intro, cockpit HUD overlays, and sector-based navigation.',
+      'Interactive Gundam cockpit portfolio — 3D Freedom Gundam boot sequence, warp intro, sector navigation, and holo comms bay.',
     tech: ['React', 'Three.js', 'Vite', 'Tailwind', 'Framer Motion'],
     details: [
-      'Unified mech viewport with per-section camera presets and semi-transparent cockpit monitors',
-      'Boot sequence with hyperspace warp effect and click-to-initialize pilot link flow',
-      'Deployed at sbalaji.vercel.app',
+      'Boot FSM: hangar warp (faceIntro→face dolly) → pilot-link face framing → LINK ESTABLISHED → portfolio shell at Home',
+      'Section camera FSM: idle at section.end → 200ms nav delay → one continuous three-point arc (current.end → next.start → next.end) with locked canonical end poses',
+      'Six tab presets each define start/end keyframes + mechRotY; Contact keeps low rear-quarter upward look; Home enables orbit only when idle at hero.end',
+      'Cockpit shell: Comms Bay holo previews (resume PDF embed), experience timeline scroll-sync, peripheral warp streaks, arc camera rig in MechViewport',
+      'Deployed at sbalaji.vercel.app — static Vite build, no server secrets',
     ],
     image: '/assets/projects/portfolio-site.jpg',
-    imageAlt: 'Portfolio website project',
+    imageAlt: 'Gundam cockpit boot screen — pilot link face framing with Freedom Gundam',
   },
   {
     id: 'spectrum',

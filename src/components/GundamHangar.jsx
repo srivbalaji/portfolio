@@ -10,7 +10,7 @@ export default function GundamHangar({ phase, onFaceClick }) {
 
   return (
     <div
-      className={`absolute inset-0 overflow-hidden bg-[#1a1018] ${atFace ? 'cursor-pointer' : ''}`}
+      className={`absolute inset-0 overflow-hidden bg-[#030508] ${atFace ? 'cursor-pointer' : ''}`}
       onClick={atFace ? onFaceClick : undefined}
       onKeyDown={(e) => atFace && e.key === 'Enter' && onFaceClick?.()}
       role={atFace ? 'button' : 'presentation'}
@@ -21,14 +21,15 @@ export default function GundamHangar({ phase, onFaceClick }) {
         showHangar
         idleSway={false}
         hideWeapons
-        snapCamera
+        introZoom={initializing}
+        snapCamera={atFace}
       />
 
       <WarpStreaks active={initializing} />
 
       <motion.div
         className="absolute inset-0 pointer-events-none z-[6]"
-        animate={{ opacity: initializing ? 0.55 : 0.25 }}
+        animate={{ opacity: initializing ? 0.5 : 0.22 }}
         style={{
           background:
             'radial-gradient(ellipse 55% 45% at 50% 50%, rgba(61,232,255,0.12) 0%, transparent 65%), radial-gradient(ellipse 50% 40% at 55% 42%, rgba(196,30,58,0.22) 0%, transparent 60%)',

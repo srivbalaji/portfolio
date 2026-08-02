@@ -12,6 +12,7 @@ import Experience from './Experience'
 import Skills from './Skills'
 import Contact from './Contact'
 import { navLinks, profile, experience } from '../data/resume'
+import { CAMERA_NAV_DELAY_MS, CAMERA_TURN_MS } from '../config/mechModel'
 
 const SECTIONS = {
   hero: Hero,
@@ -22,14 +23,14 @@ const SECTIONS = {
   contact: Contact,
 }
 const panelVariants = {
-  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 40 : -40, filter: 'blur(3px)' }),
+  enter: (dir) => ({ opacity: 0, x: dir > 0 ? 22 : -22, filter: 'blur(2px)' }),
   center: { opacity: 1, x: 0, filter: 'blur(0px)' },
-  exit: (dir) => ({ opacity: 0, x: dir > 0 ? -28 : 28, filter: 'blur(3px)' }),
+  exit: (dir) => ({ opacity: 0, x: dir > 0 ? -16 : 16, filter: 'blur(2px)' }),
 }
 
-const TURN_MS = 520
+const TURN_MS = CAMERA_NAV_DELAY_MS + CAMERA_TURN_MS
 
-export default function PortfolioShell({ initialSection = 'hero' }) {
+export default function PortfolioShell({ initialSection = 'hero', entryFromIntro = false, onIntroEntryDone }) {
   const [active, setActive] = useState(initialSection)
   const [direction, setDirection] = useState(0)
   const [overlayVisible, setOverlayVisible] = useState(false)
@@ -167,7 +168,7 @@ export default function PortfolioShell({ initialSection = 'hero' }) {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                 className="max-w-2xl"
               >
                 <ActiveSection embedded onNavigate={navigate} onOpenHolo={openHoloChannel} />
@@ -177,7 +178,14 @@ export default function PortfolioShell({ initialSection = 'hero' }) {
         </main>
 
         <aside className="mech-panel relative shrink-0 h-[36vh] lg:h-auto lg:w-[44%] border-t lg:border-t-0 lg:border-l border-gundam/15 overflow-hidden">
-          <MechViewport cameraTarget={active} showHangar idleSway />
+          <MechViewport
+            cameraTarget={active}
+            showHangar
+            idleSway
+            enableOrbit={active === 'hero'}
+            entryFromIntro={entryFromIntro && active === 'hero'}
+            onEntrySettled={onIntroEntryDone}
+          />
           <div
             className="absolute inset-0 pointer-events-none z-10"
             style={{

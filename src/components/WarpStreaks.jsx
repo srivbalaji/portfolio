@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 
-/** Star-wars-style hyperspace streaks during intro initialization */
+/** Periphery-only hyperspace streaks — center stays clear (tunnel vision) */
+const INNER_HOLE = 0.36
+
 export default function WarpStreaks({ active = true }) {
   const canvasRef = useRef(null)
   const rafRef = useRef(null)
@@ -15,14 +17,23 @@ export default function WarpStreaks({ active = true }) {
     let cx = 0
     let cy = 0
 
-    const streaks = Array.from({ length: 90 }, () => ({
+    const blueStreaks = Array.from({ length: 100 }, () => ({
       angle: Math.random() * Math.PI * 2,
-      dist: Math.random() * 0.15,
-      speed: 0.012 + Math.random() * 0.028,
-      len: 0.04 + Math.random() * 0.14,
-      width: 0.6 + Math.random() * 1.8,
+      dist: INNER_HOLE + Math.random() * 0.2,
+      speed: 0.014 + Math.random() * 0.028,
+      len: 0.05 + Math.random() * 0.14,
+      width: 0.7 + Math.random() * 2,
       hue: 185 + Math.random() * 35,
-      alpha: 0.35 + Math.random() * 0.55,
+      alpha: 0.3 + Math.random() * 0.45,
+    }))
+
+    const redStreaks = Array.from({ length: 22 }, () => ({
+      angle: Math.random() * Math.PI * 2,
+      dist: INNER_HOLE + Math.random() * 0.18,
+      speed: 0.01 + Math.random() * 0.02,
+      len: 0.07 + Math.random() * 0.16,
+      width: 1 + Math.random() * 2,
+      alpha: 0.12 + Math.random() * 0.28,
     }))
 
     const resize = () => {
@@ -40,20 +51,21 @@ export default function WarpStreaks({ active = true }) {
     window.addEventListener('resize', resize)
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(5, 8, 16, 0.22)'
-      ctx.fillRect(0, 0, w, h)
+      ctx.clearRect(0, 0, w, h)
 
       const maxR = Math.hypot(cx, cy) * 1.15
+      const innerR = maxR * INNER_HOLE
 
-      streaks.forEach((s) => {
+      const drawStreak = (s, crimson = false) => {
         s.dist += s.speed
         if (s.dist > 1.05) {
-          s.dist = Math.random() * 0.08
+          s.dist = INNER_HOLE + Math.random() * 0.08
           s.angle = Math.random() * Math.PI * 2
-          s.speed = 0.012 + Math.random() * 0.028
         }
 
         const r0 = s.dist * maxR
+        if (r0 < innerR) return
+
         const r1 = r0 + s.len * maxR
         const x0 = cx + Math.cos(s.angle) * r0
         const y0 = cy + Math.sin(s.angle) * r0
@@ -61,9 +73,15 @@ export default function WarpStreaks({ active = true }) {
         const y1 = cy + Math.sin(s.angle) * r1
 
         const grad = ctx.createLinearGradient(x0, y0, x1, y1)
-        grad.addColorStop(0, `hsla(${s.hue}, 100%, 72%, 0)`)
-        grad.addColorStop(0.35, `hsla(${s.hue}, 100%, 78%, ${s.alpha})`)
-        grad.addColorStop(1, `hsla(${s.hue}, 100%, 92%, ${Math.min(1, s.alpha + 0.25)})`)
+        if (crimson) {
+          grad.addColorStop(0, 'rgba(196, 30, 58, 0)')
+          grad.addColorStop(0.45, `rgba(255, 80, 100, ${s.alpha})`)
+          grad.addColorStop(1, `rgba(255, 140, 160, ${s.alpha + 0.15})`)
+        } else {
+          grad.addColorStop(0, `hsla(${s.hue}, 100%, 72%, 0)`)
+          grad.addColorStop(0.35, `hsla(${s.hue}, 100%, 78%, ${s.alpha})`)
+          grad.addColorStop(1, `hsla(${s.hue}, 100%, 92%, ${Math.min(1, s.alpha + 0.2)})`)
+        }
 
         ctx.strokeStyle = grad
         ctx.lineWidth = s.width
@@ -72,7 +90,19 @@ export default function WarpStreaks({ active = true }) {
         ctx.moveTo(x0, y0)
         ctx.lineTo(x1, y1)
         ctx.stroke()
-      })
+      }
+
+      blueStreaks.forEach((s) => drawStreak(s))
+      redStreaks.forEach((s) => drawStreak(s, true))
+
+      /* static peripheral glow — center permanently clear */
+      const edgeGlow = ctx.createRadialGradient(cx, cy, innerR * 0.95, cx, cy, maxR)
+      edgeGlow.addColorStop(0, 'rgba(0, 0, 0, 0)')
+      edgeGlow.addColorStop(0.35, 'rgba(61, 232, 255, 0.04)')
+      edgeGlow.addColorStop(0.7, 'rgba(61, 232, 255, 0.1)')
+      edgeGlow.addColorStop(1, 'rgba(120, 180, 255, 0.16)')
+      ctx.fillStyle = edgeGlow
+      ctx.fillRect(0, 0, w, h)
 
       rafRef.current = requestAnimationFrame(draw)
     }
