@@ -1,30 +1,33 @@
-# srivatsanbalaji.com
+# sbalaji.vercel.app
 
 Hey — I'm Srivatsan Balaji. This is the source for my personal portfolio.
 
-I'm a Computer Engineering student at the University of Michigan (Math minor). I work on embedded firmware, robotics, and systems that actually ship — Atombot Lab, SPARK Electric Racing, and a handful of hardware projects I've documented here.
+**Live site:** [https://sbalaji.vercel.app](https://sbalaji.vercel.app)
 
-The intro uses a **3D mecha model** in the hangar. Default target is **Freedom Gundam** (CC BY, cosmos28 on Sketchfab). Until you fetch it, the site falls back to **RX-78-2** from Icosa Gallery.
+I'm a Computer Engineering student at the University of Michigan (Math minor). I work on embedded firmware, robotics, and systems that actually ship — Atombot Lab, SPARK Electric Racing, and Trackonomy.
+
+The intro uses a **3D mecha model** in the hangar. Default target is **Freedom Gundam** (CC BY, cosmos28 on Sketchfab). The bundled `model.glb` is included in-repo; re-fetch only if you need to refresh it.
 
 ```bash
-# Freedom Gundam (recommended — looks like ZGMF-X10A, textured)
-# 1. Free Sketchfab account → https://sketchfab.com/settings/password → copy API token
-# 2. PowerShell:
-$env:SKETCHFAB_TOKEN="YOUR_TOKEN"
+# Optional re-download (requires local token — never commit this)
+cp .env.example .env.local
+# set SKETCHFAB_TOKEN in .env.local, then:
 npm run fetch-model
-
-# RX-78 fallback only (no token):
-npm run fetch-model -- --variant rx78
 ```
 
 Open-source picks (verified):
 | Model | License | Source |
 |-------|---------|--------|
 | **gundam freedom** (cosmos28) | CC BY 4.0 | [Sketchfab](https://sketchfab.com/3d-models/gundam-freedom-02042775eda240c09d8a39ecc989ad29) |
-| ZGMF-X10A Freedom OG textures (Risingprime250) | CC BY | `--variant freedom-lite` |
 | RX-78-2 with weapons (Tipatat) | CC BY 3.0 | `--variant rx78` |
 
 Credits live in each model folder’s `CREDITS.txt`.
+
+## Security
+
+- **No API keys in the repo.** Sketchfab tokens are read from `SKETCHFAB_TOKEN` at script runtime only.
+- `.env`, `.env.local`, and credentials are gitignored. Use `.env.example` as a template.
+- Safe to deploy on Vercel — static React build, no server-side secrets.
 
 ## Run locally
 
@@ -35,37 +38,26 @@ npm run dev
 
 Open **http://localhost:5173**
 
-The intro is an interactive cockpit — pick a sector and hit **ENGAGE**, or skip with the top-right link.
-
 ## Deploy
 
-I host this on Vercel:
+Connected to Vercel from [github.com/srivbalaji/portfolio](https://github.com/srivbalaji/portfolio):
 
 ```bash
 npm run build
 npx vercel
 ```
 
-Or connect the repo on [vercel.com](https://vercel.com).
-
 ## Project images
 
-Drop photos into `public/assets/projects/`:
+Drop photos into `public/assets/projects/` (optional). Paths live in `src/data/resume.js`.
 
-| File | Project |
-|------|---------|
-| `sensor-logger.jpg` | Low-Power Embedded Sensor Logger |
-| `bluetooth-hw.jpg` | Embedded Bluetooth Hardware |
-| `spectrum.jpg` | Audio Spectrum Visualizer |
-| `atombot.jpg` | Atombot Lab |
-| `spark.jpg` | SPARK Electric Racing |
-| `cad-pen.jpg` | CAD Reverse Engineering |
+Resume PDF: `public/Srivatsan_Balaji_Resume.pdf`
 
-Paths live in `src/data/resume.js`. Resume PDF: `public/Srivatsan_Balaji_Resume.pdf`
+Holo comm placeholders: `public/assets/holo/*.svg` (swap for JPG screenshots anytime)
 
 ## Stack
 
-React, Vite, Tailwind, Framer Motion.
+React, Vite, Tailwind, Framer Motion, Three.js.
 
 ## Contact
 
