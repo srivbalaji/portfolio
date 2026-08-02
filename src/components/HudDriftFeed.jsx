@@ -51,10 +51,10 @@ function DriftLine({ text, top, delay, fromLeft }) {
   )
 }
 
-/** Telemetry strings that drift across both sides of the GUI */
+/** Telemetry strings that drift across both sides of the GUI — hidden on compact viewports */
 export default function HudDriftFeed() {
   return (
-    <div className="hud-drift pointer-events-none fixed inset-0 z-[25] overflow-hidden" aria-hidden="true">
+    <div className="hud-drift pointer-events-none fixed inset-0 z-[25] overflow-hidden hidden lg:block" aria-hidden="true">
       <div className="absolute inset-y-0 left-0 w-[38%] md:w-[26%] overflow-hidden">
         {LEFT_DRIFTS.map((d) => (
           <DriftLine key={d.id} text={d.text} top={d.top} delay={d.delay} fromLeft />

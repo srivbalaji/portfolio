@@ -37,13 +37,13 @@ export default function GundamHangar({ phase, onFaceClick }) {
       />
 
       <motion.div
-        className="absolute bottom-8 left-0 right-0 text-center z-10 pointer-events-none px-4"
+        className="absolute bottom-[max(2rem,env(safe-area-inset-bottom))] left-0 right-0 text-center z-10 pointer-events-none px-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
         {!atFace && (
-          <p className="font-ui text-[10px] md:text-xs tracking-[0.35em] text-ice/70 drop-shadow-lg">
+          <p className="font-ui text-[9px] sm:text-[10px] md:text-xs tracking-[0.22em] sm:tracking-[0.35em] text-ice/70 drop-shadow-lg">
             COCKPIT LINK · UNIT UM-AA · INITIALIZING
           </p>
         )}
@@ -53,7 +53,7 @@ export default function GundamHangar({ phase, onFaceClick }) {
               PILOT LINK · READY
             </p>
             <motion.p
-              className="mt-3 font-mono text-[10px] md:text-xs tracking-[0.22em] text-ice/80 bg-gundam/20 inline-block px-4 py-2 border border-gundam/40"
+              className="mt-2 sm:mt-3 font-mono text-[9px] sm:text-[10px] md:text-xs tracking-[0.16em] sm:tracking-[0.22em] text-ice/80 bg-gundam/20 inline-block px-3 sm:px-4 py-2 border border-gundam/40"
               animate={{ opacity: [0.55, 1, 0.55] }}
               transition={{ duration: 2.2, repeat: Infinity }}
             >

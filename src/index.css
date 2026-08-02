@@ -76,25 +76,31 @@
     );
   }
 
-  /* Panel pop-out on hover */
+  /* Panel pop-out on hover — desktop pointer only */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-pop:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow:
+        0 0 0 1px rgba(61, 232, 255, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 20px 50px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(61, 232, 255, 0.12);
+      border-color: rgba(61, 232, 255, 0.45);
+      z-index: 20;
+    }
+
+    .hover-pop-subtle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(61, 232, 255, 0.1);
+    }
+  }
+
   .hover-pop {
     @apply transition-all duration-300 ease-out;
   }
 
-  .hover-pop:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow:
-      0 0 0 1px rgba(61, 232, 255, 0.25),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 20px 50px rgba(0, 0, 0, 0.5),
-      0 0 40px rgba(61, 232, 255, 0.12);
-    border-color: rgba(61, 232, 255, 0.45);
-    z-index: 20;
-  }
-
-  .hover-pop-subtle:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(61, 232, 255, 0.1);
+  .hover-pop-subtle {
+    @apply transition-all duration-300 ease-out;
   }
 
   .shell-layout {
@@ -312,6 +318,37 @@
   .viewport-cockpit-grid.contact-holo-layout .contact-holo-primary .monitor-screen {
     flex: 1;
     min-height: 110px;
+  }
+
+  /* Mobile / tablet — below lg only */
+  @media (max-width: 1023px) {
+    .shell-mobile-nav {
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .shell-mobile-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .viewport-cockpit-grid.contact-holo-compact {
+      grid-template-rows: 1fr;
+      min-height: 0;
+    }
+
+    .viewport-cockpit-grid.contact-holo-compact .contact-holo-primary {
+      min-height: 0;
+      height: 100%;
+    }
+
+    .viewport-cockpit-grid.contact-holo-compact .contact-holo-primary .monitor-screen {
+      min-height: 0;
+      padding: 0.35rem;
+    }
+
+    .section-title {
+      @apply text-2xl sm:text-3xl;
+    }
   }
 }
 

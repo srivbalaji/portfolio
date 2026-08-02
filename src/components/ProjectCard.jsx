@@ -14,7 +14,7 @@ export default function ProjectCard({ project, index }) {
       transition={{ delay: index * 0.08 }}
       whileHover={{ y: -4 }}
     >
-      <motion.div className="relative h-48 bg-panelLight overflow-hidden border-b border-cyan/20">
+      <motion.div className="relative h-40 sm:h-48 bg-panelLight overflow-hidden border-b border-cyan/20">
         {!imgError ? (
           <img
             src={project.image}

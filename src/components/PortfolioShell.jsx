@@ -13,6 +13,7 @@ import Skills from './Skills'
 import Contact from './Contact'
 import { navLinks, profile, experience } from '../data/resume'
 import { CAMERA_NAV_DELAY_MS, CAMERA_TURN_MS } from '../config/mechModel'
+import { useCompactViewport, useFinePointer } from '../hooks/useCompactViewport'
 
 const SECTIONS = {
   hero: Hero,
@@ -116,18 +117,24 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
 
   const ActiveSection = SECTIONS[active] ?? Hero
   const activeMeta = navLinks.find(l => l.id === active)
+  const isCompact = useCompactViewport()
+  const finePointer = useFinePointer()
+  const showViewportOverlay =
+    overlayVisible &&
+    active !== 'hero' &&
+    (!isCompact || (active === 'contact' && holoChannel))
 
   return (
-    <div className="shell-layout min-h-screen flex flex-col">
+    <div className="shell-layout min-h-screen flex flex-col supports-[padding:max(0px)]:pb-[max(0px,env(safe-area-inset-bottom))]">
       <HudDriftFeed />
       <SectionRadar active={active} onNavigate={navigate} />
 
-      <header className="shrink-0 z-30 flex items-center justify-between px-4 md:px-8 py-3 border-b border-gundam/20 bg-void/85 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <span className="font-display text-lg md:text-xl text-ice tracking-wider">{profile.name.split(' ')[0]}</span>
+      <header className="shrink-0 z-30 flex items-center justify-between px-3 sm:px-4 md:px-8 py-2.5 md:py-3 pt-[max(0.625rem,env(safe-area-inset-top))] border-b border-gundam/20 bg-void/85 backdrop-blur-md">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <span className="font-display text-base sm:text-lg md:text-xl text-ice tracking-wider truncate">{profile.name.split(' ')[0]}</span>
           <span className="hidden sm:inline font-mono text-[9px] text-gundam/50 tracking-[0.25em]">PILOT · UM-AA</span>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[9px] text-cyan/50 pr-[7.5rem] md:pr-[9.5rem]">
+        <div className="flex items-center gap-2 font-mono text-[9px] text-cyan/50 pr-[5.25rem] sm:pr-[6.5rem] md:pr-[9.5rem] shrink-0">
           <span className="text-gundam animate-pulse">●</span>
           <span>{activeMeta?.label ?? 'Home'}</span>
         </div>
@@ -135,15 +142,15 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
 
       <div className="flex-1 flex flex-col lg:flex-row min-h-0">
         <nav className="shrink-0 lg:w-48 border-b lg:border-b-0 lg:border-r border-gundam/15 bg-panel/50 backdrop-blur-sm relative overflow-hidden">
-          <ul className="relative z-10 flex lg:flex-col overflow-x-auto lg:overflow-visible px-2 py-2 lg:py-6 gap-1">
+          <ul className="shell-mobile-nav relative z-10 flex lg:flex-col overflow-x-auto lg:overflow-visible px-2 py-2 lg:py-6 gap-1 snap-x snap-mandatory lg:snap-none">
             {navLinks.map((link) => {
               const isActive = active === link.id
               return (
-                <li key={link.id} className="shrink-0">
+                <li key={link.id} className="shrink-0 snap-start">
                   <button
                     type="button"
                     onClick={() => navigate(link.id)}
-                    className={`w-full flex items-center gap-3 px-3 lg:px-4 py-2.5 text-left transition-all border-l-2 lg:border-l-[3px] ${
+                    className={`w-full flex items-center gap-2 sm:gap-3 px-3 lg:px-4 py-2.5 min-h-[44px] text-left transition-all border-l-2 lg:border-l-[3px] ${
                       isActive
                         ? 'bg-gundam/10 border-gundam text-ice'
                         : 'border-transparent text-ice/45 hover:text-gundam/90 hover:bg-gundam/5'
@@ -158,8 +165,8 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
           </ul>
         </nav>
 
-        <main className="flex-1 relative min-h-[50vh] lg:min-h-0 overflow-hidden">
-          <div className="absolute inset-0 overflow-y-auto shell-scroll px-4 md:px-8 lg:px-10 py-6 md:py-8">
+        <main className="flex-1 relative min-h-0 lg:min-h-0 overflow-hidden order-2 lg:order-none">
+          <div className="absolute inset-0 overflow-y-auto shell-scroll overscroll-y-contain px-3 sm:px-4 md:px-8 lg:px-10 py-4 sm:py-6 md:py-8">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={active}
@@ -177,17 +184,18 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
           </div>
         </main>
 
-        <aside className="mech-panel relative shrink-0 h-[36vh] lg:h-auto lg:w-[44%] border-t lg:border-t-0 lg:border-l border-gundam/15 overflow-hidden">
+        <aside className="mech-panel relative shrink-0 order-3 h-[min(32vh,280px)] sm:h-[min(34vh,300px)] lg:h-auto lg:w-[44%] border-t lg:border-t-0 lg:border-l border-gundam/15 overflow-hidden">
           <MechViewport
             cameraTarget={active}
             showHangar
             idleSway
-            enableOrbit={active === 'hero'}
+            enableOrbit={active === 'hero' && finePointer && !isCompact}
             entryFromIntro={entryFromIntro && active === 'hero'}
             onEntrySettled={onIntroEntryDone}
+            mobileOptimized={isCompact}
           />
           <div
-            className="absolute inset-0 pointer-events-none z-10"
+            className="absolute inset-0 pointer-events-none z-10 max-lg:opacity-80"
             style={{
               background:
                 'linear-gradient(90deg, rgba(8,4,10,0.75) 0%, transparent 28%), linear-gradient(0deg, rgba(8,4,10,0.45) 0%, transparent 18%)',
@@ -195,7 +203,8 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
           />
           <CockpitViewportOverlay
             sectionId={active}
-            visible={overlayVisible && active !== 'hero'}
+            visible={showViewportOverlay}
+            compact={isCompact}
             onNavigate={navigate}
             onScrollToExperience={scrollToExperienceEntry}
             activeExperienceId={activeExperienceId}
@@ -204,11 +213,11 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
             onHoloClose={closeHoloChannel}
             onHoloOpen={followHoloChannel}
           />
-          <div className="absolute bottom-3 right-3 left-3 z-30 flex justify-between items-end pointer-events-none">
-            <span className="font-mono text-[8px] text-gundam/40 tracking-widest uppercase">
+          <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 left-2 sm:left-3 z-30 flex justify-between items-end pointer-events-none gap-2">
+            <span className="font-mono text-[7px] sm:text-[8px] text-gundam/40 tracking-widest uppercase truncate max-lg:max-w-[45%]">
               Ext. · {activeMeta?.label}
             </span>
-            <MechCredit compact />
+            <MechCredit compact className="hidden lg:block" />
           </div>
         </aside>
       </div>

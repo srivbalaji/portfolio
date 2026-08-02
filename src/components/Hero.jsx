@@ -40,7 +40,7 @@ export default function Hero({ embedded, onNavigate }) {
 
           <motion.h1
             className={`font-display font-bold text-ice leading-none mb-4 ${
-              embedded ? 'text-4xl sm:text-5xl md:text-6xl' : 'text-5xl sm:text-6xl md:text-7xl xl:text-8xl'
+              embedded ? 'text-3xl sm:text-4xl md:text-6xl' : 'text-5xl sm:text-6xl md:text-7xl xl:text-8xl'
             }`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

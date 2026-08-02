@@ -8,6 +8,7 @@ import { HoloPanel } from '../HoloTransmission'
 export default function CockpitViewportOverlay({
   sectionId,
   visible,
+  compact = false,
   onNavigate,
   onScrollToExperience,
   activeExperienceId,
@@ -52,22 +53,24 @@ export default function CockpitViewportOverlay({
       <div className="absolute right-2 top-[12%] bottom-[18%] w-1 bg-gradient-to-b from-transparent via-cyan/20 to-transparent" />
 
       <motion.div
-        className="relative z-10 h-full p-3 md:p-4 flex flex-col pointer-events-auto"
+        className={`relative z-10 h-full flex flex-col pointer-events-auto ${compact ? 'p-2' : 'p-3 md:p-4'}`}
         initial={false}
         animate={{ opacity: visible ? 0.88 : 0, y: visible ? 0 : 12 }}
         transition={{ duration: 0.5, delay: visible ? 0.1 : 0 }}
       >
-        <div className="flex items-center justify-between mb-2 shrink-0">
-          <p className="font-mono text-[8px] md:text-[9px] tracking-[0.28em] text-gundam/85">
-            {layout.roomTitle}
-          </p>
-          <p className="font-mono text-[8px] text-cyan/55">
-            {meta?.icon} {meta?.label}
-          </p>
-        </div>
+        {!compact && (
+          <div className="flex items-center justify-between mb-2 shrink-0">
+            <p className="font-mono text-[8px] md:text-[9px] tracking-[0.28em] text-gundam/85">
+              {layout.roomTitle}
+            </p>
+            <p className="font-mono text-[8px] text-cyan/55">
+              {meta?.icon} {meta?.label}
+            </p>
+          </div>
+        )}
 
         <div
-          className={`viewport-cockpit-grid flex-1 min-h-0 ${sectionId === 'experience' ? 'experience-layout' : ''} ${showHolo ? 'contact-holo-layout' : ''}`}
+          className={`viewport-cockpit-grid flex-1 min-h-0 ${sectionId === 'experience' ? 'experience-layout' : ''} ${showHolo ? 'contact-holo-layout contact-holo-compact' : ''} ${compact && !showHolo ? 'hidden' : ''}`}
         >
           <motion.div
             className={`cockpit-monitor primary viewport-primary ${sectionId === 'experience' ? 'experience-primary' : ''} ${showHolo ? 'contact-holo-primary' : ''}`}
@@ -103,7 +106,7 @@ export default function CockpitViewportOverlay({
             </div>
           </motion.div>
 
-          <div className={`viewport-aux-grid ${sectionId === 'experience' ? 'experience-aux' : ''}`}>
+          <div className={`viewport-aux-grid ${sectionId === 'experience' ? 'experience-aux' : ''} ${compact ? 'hidden' : ''}`}>
             <SectionAuxPanels
               sectionId={sectionId}
               layout={layout}

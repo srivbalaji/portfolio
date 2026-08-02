@@ -20,7 +20,7 @@ export default function Contact({ embedded, onOpenHolo }) {
         </motion.h2>
 
         <motion.div
-          className="grid sm:grid-cols-2 gap-4 mb-12"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -30,7 +30,7 @@ export default function Contact({ embedded, onOpenHolo }) {
               key={link.label}
               type="button"
               onClick={() => onOpenHolo?.({ channel: link.channel, href: link.href })}
-              className="p3-panel hover-pop p-6 flex items-center justify-center gap-4 group text-left w-full"
+              className="p3-panel hover-pop p-4 sm:p-6 flex items-center justify-center gap-3 sm:gap-4 group text-left w-full min-h-[52px]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

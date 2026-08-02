@@ -702,8 +702,10 @@ export default function MechViewport({
   entryFromIntro = false,
   onEntrySettled,
   className = '',
+  mobileOptimized = false,
 }) {
   const [mech, setMech] = useState(null)
+  const canvasDpr = mobileOptimized ? [1, 1.25] : [1, 1.75]
 
   useEffect(() => {
     resolveModelPath().then(setMech)
@@ -718,7 +720,7 @@ export default function MechViewport({
     <div className={`w-full h-full ${className} ${enableOrbit ? 'cursor-grab active:cursor-grabbing' : ''}`}>
       <Canvas
         shadows
-        dpr={[1, 1.75]}
+        dpr={canvasDpr}
         gl={{ antialias: true, alpha: false }}
         camera={{ fov: 38, near: 0.1, far: 100, position: bootPos }}
         onCreated={({ camera }) => {

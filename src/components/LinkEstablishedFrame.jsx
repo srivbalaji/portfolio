@@ -3,9 +3,9 @@ import { motion } from 'framer-motion'
 /** Minimal PCB-style frame around LINK ESTABLISHED */
 export default function LinkEstablishedFrame({ children }) {
   return (
-    <div className="relative">
+    <div className="relative px-4 sm:px-0">
       <svg
-        className="absolute -inset-x-10 -inset-y-8 w-[calc(100%+5rem)] h-[calc(100%+4rem)] pointer-events-none"
+        className="absolute -inset-x-6 sm:-inset-x-10 -inset-y-6 sm:-inset-y-8 w-[calc(100%+3rem)] sm:w-[calc(100%+5rem)] h-[calc(100%+3rem)] sm:h-[calc(100%+4rem)] pointer-events-none"
         viewBox="0 0 420 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

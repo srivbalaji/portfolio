@@ -72,10 +72,10 @@ export default function BootScreen({ onComplete, onNavigate }) {
           animate={{ opacity: 1 }}
         >
           <LinkEstablishedFrame>
-            <p className="font-display text-2xl text-cyan tracking-[0.5em] animate-pulse px-4">
+            <p className="font-display text-lg sm:text-2xl text-cyan tracking-[0.28em] sm:tracking-[0.5em] animate-pulse px-4 text-center">
               LINK ESTABLISHED
             </p>
-            <p className="font-mono text-[9px] text-cyan/40 tracking-[0.35em] text-center mt-3">
+            <p className="font-mono text-[8px] sm:text-[9px] text-cyan/40 tracking-[0.22em] sm:tracking-[0.35em] text-center mt-2 sm:mt-3">
               NEURAL LINK · SYNC OK
             </p>
           </LinkEstablishedFrame>

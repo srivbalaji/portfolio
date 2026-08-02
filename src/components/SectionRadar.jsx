@@ -232,12 +232,12 @@ export default function SectionRadar({ active, onNavigate }) {
 
   return (
     <div
-      className="section-radar fixed z-40 top-[3.25rem] right-3 md:right-5 w-[108px] h-[108px] md:w-[132px] md:h-[132px] pointer-events-auto"
+      className="section-radar fixed z-40 top-[max(3rem,env(safe-area-inset-top))] right-2 sm:right-3 md:right-5 w-[88px] h-[88px] sm:w-[108px] sm:h-[108px] md:w-[132px] md:h-[132px] pointer-events-auto"
       aria-label="Section navigation radar"
     >
       <SquareRadarSvg active={active} onNavigate={onNavigate} hovered={hovered} setHovered={setHovered} />
       <p
-        className={`absolute -bottom-5 left-0 right-0 text-center font-mono text-[8px] md:text-[9px] tracking-widest uppercase truncate px-1 transition-colors ${
+        className={`absolute -bottom-4 sm:-bottom-5 left-0 right-0 text-center font-mono text-[7px] sm:text-[8px] md:text-[9px] tracking-widest uppercase truncate px-1 transition-colors ${
           hovered ? 'text-cyan' : 'text-cyan/50'
         }`}
       >
