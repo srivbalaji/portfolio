@@ -108,6 +108,7 @@ export const projects = [
     id: 'thread-scheduler',
     title: 'User-Space Thread Scheduler',
     status: 'ONGOING',
+    url: 'https://github.com/srivbalaji/User-Space-Thread-Scheduler',
     description:
       'User-space threading library with cooperative and preemptive multitasking — context switching in raw x86-64 assembly without std::thread.',
     tech: ['C++17', 'x86-64 Assembly', 'std::atomic', 'Lock-free'],
@@ -117,7 +118,22 @@ export const projects = [
       'Work-stealing thread pool benchmarked against std::thread across task granularity and core counts',
     ],
     image: '/assets/projects/thread-scheduler.jpg',
-    imageAlt: 'User-space thread scheduler project',
+    imageAlt: 'CPU processor die — user-space thread scheduler',
+  },
+  {
+    id: 'spectrum',
+    title: 'Real-Time Audio Spectrum Visualizer',
+    status: 'COMPLETE',
+    url: 'https://github.com/srivbalaji/Audio-Spectrum-Visualizer',
+    description:
+      'FFT-based audio processing on STM32 with OLED visualization — real-time DSP on constrained hardware.',
+    tech: ['Embedded C', 'STM32', 'FFT', 'OLED', 'Fixed-Point'],
+    details: [
+      'Reduced latency 30% through fixed-point arithmetic and optimized buffer management',
+      'Developed FFT-based signal processing to visualize frequency spectrum on OLED display',
+    ],
+    image: '/assets/projects/spectrum.jpg',
+    imageAlt: 'STM32 Nucleo development board used for audio spectrum visualization',
   },
   {
     id: 'portfolio-site',
@@ -136,20 +152,6 @@ export const projects = [
     ],
     image: '/assets/projects/portfolio-site.jpg',
     imageAlt: 'Gundam cockpit boot screen — pilot link face framing with Freedom Gundam',
-  },
-  {
-    id: 'spectrum',
-    title: 'Real-Time Audio Spectrum Visualizer',
-    status: 'COMPLETE',
-    description:
-      'FFT-based audio processing on STM32 with OLED visualization — real-time DSP on constrained hardware.',
-    tech: ['Embedded C', 'STM32', 'FFT', 'OLED', 'Fixed-Point'],
-    details: [
-      'Reduced latency 30% through fixed-point arithmetic and optimized buffer management',
-      'Developed FFT-based signal processing to visualize frequency spectrum on OLED display',
-    ],
-    image: '/assets/projects/spectrum.jpg',
-    imageAlt: 'Audio spectrum visualizer',
   },
 ]
 
