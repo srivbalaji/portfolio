@@ -108,7 +108,6 @@ export const projects = [
     id: 'thread-scheduler',
     title: 'User-Space Thread Scheduler',
     status: 'ONGOING',
-    url: 'https://github.com/srivbalaji/User-Space-Thread-Scheduler',
     description:
       'User-space threading library with cooperative and preemptive multitasking — context switching in raw x86-64 assembly without std::thread.',
     tech: ['C++17', 'x86-64 Assembly', 'std::atomic', 'Lock-free'],
@@ -124,7 +123,6 @@ export const projects = [
     id: 'spectrum',
     title: 'Real-Time Audio Spectrum Visualizer',
     status: 'COMPLETE',
-    url: 'https://github.com/srivbalaji/Audio-Spectrum-Visualizer',
     description:
       'FFT-based audio processing on STM32 with OLED visualization — real-time DSP on constrained hardware.',
     tech: ['Embedded C', 'STM32', 'FFT', 'OLED', 'Fixed-Point'],
