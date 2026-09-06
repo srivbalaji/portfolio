@@ -62,7 +62,7 @@ function EducationPanel() {
 function InterestsPanel() {
   return (
     <ul className="font-mono text-[8px] text-ice/50 space-y-0.5">
-      {profile.interests.slice(0, 4).map((i) => (
+      {profile.interests.map((i) => (
         <li key={i} className="text-gundam/60">› {i}</li>
       ))}
     </ul>
@@ -93,21 +93,26 @@ function TechPanel() {
   )
 }
 
-function TimelinePanel({ onScrollToExperience, activeEntryId, onActiveEntryChange }) {
+function TimelinePanel({ onScrollToExperience, activeEntryId, onActiveEntryChange, onSelectWork, selectedWork }) {
   return (
-    <div className="experience-timeline h-full min-h-[120px] py-1">
-      <div className="relative h-full pl-4">
-        <div className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-cyan/70 via-gundam/50 to-cyan/20" />
-        <ul className="relative flex flex-col justify-between h-full gap-2">
+    <div className="experience-timeline h-full min-h-0 py-0.5">
+      <div className="relative h-full min-h-0 pl-4">
+        <div className="absolute left-[7px] top-1 bottom-1 w-px bg-gradient-to-b from-cyan/70 via-gundam/50 to-cyan/20" />
+        <ul className="relative flex flex-col gap-2.5 pr-1">
           {experience.map((job) => {
-            const isActive = activeEntryId === job.id
+            const isActive =
+              selectedWork?.kind === 'experience'
+                ? selectedWork.id === job.id
+                : activeEntryId === job.id
             const year = job.period.match(/\d{4}/)?.[0] ?? ''
+            const orgShort = job.org.replace(/^University of Michigan — /, 'UMich · ')
             return (
-              <li key={job.id}>
+              <li key={job.id} className="shrink-0">
                 <button
                   type="button"
                   onClick={() => {
                     onActiveEntryChange?.(job.id)
+                    onSelectWork?.({ kind: 'experience', id: job.id })
                     onScrollToExperience?.(job.id)
                   }}
                   className={`group w-full text-left flex items-start gap-2 transition-colors ${
@@ -115,16 +120,16 @@ function TimelinePanel({ onScrollToExperience, activeEntryId, onActiveEntryChang
                   }`}
                 >
                   <span
-                    className={`relative z-10 mt-0.5 shrink-0 w-4 h-4 rounded-full border-2 transition-all ${
+                    className={`relative z-10 mt-0.5 shrink-0 w-3.5 h-3.5 rounded-full border-2 transition-all ${
                       isActive
                         ? 'border-cyan bg-cyan/30 shadow-[0_0_8px_rgba(61,232,255,0.55)]'
                         : 'border-gundam/50 bg-void group-hover:border-cyan/60'
                     }`}
                   />
-                  <span className="min-w-0">
-                    <span className="block font-mono text-[8px] tracking-wider text-gundam/70">{year}</span>
-                    <span className="block font-mono text-[9px] leading-tight truncate">{job.org}</span>
-                    <span className="block font-mono text-[8px] text-ice/40 truncate">{job.title}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-mono text-[7px] tracking-wider text-gundam/70">{year}</span>
+                    <span className="block font-mono text-[8px] leading-tight truncate">{orgShort}</span>
+                    <span className="block font-mono text-[7px] text-ice/40 truncate">{job.title}</span>
                   </span>
                 </button>
               </li>
@@ -204,6 +209,8 @@ const AUX_MAP = {
         onScrollToExperience={p.onScrollToExperience}
         activeEntryId={p.activeExperienceId}
         onActiveEntryChange={p.onActiveExperienceChange}
+        onSelectWork={p.onSelectWork}
+        selectedWork={p.selectedWork}
       />
     ),
   },
@@ -214,7 +221,16 @@ const AUX_MAP = {
   signal: { label: 'SIGNAL', render: () => <SignalPanel /> },
 }
 
-export default function SectionAuxPanels({ sectionId, layout, onNavigate, onScrollToExperience, activeExperienceId, onActiveExperienceChange }) {
+export default function SectionAuxPanels({
+  sectionId,
+  layout,
+  onNavigate,
+  onScrollToExperience,
+  activeExperienceId,
+  onActiveExperienceChange,
+  onSelectWork,
+  selectedWork,
+}) {
   if (!layout?.aux?.length) return null
 
   return (
@@ -235,6 +251,8 @@ export default function SectionAuxPanels({ sectionId, layout, onNavigate, onScro
               onScrollToExperience,
               activeExperienceId,
               onActiveExperienceChange,
+              onSelectWork,
+              selectedWork,
             })}
           </AuxMonitor>
         )

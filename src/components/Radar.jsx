@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { navLinks } from '../data/resume'
-import { useRadarSweep, SWEEP_DURATION_S, BLIP_RING_FACTORS } from '../hooks/useRadarSweep'
+import { useRadarSweep, BLIP_RING_FACTORS, sweepTrailPath, SWEEP_TRAIL_DEG } from '../hooks/useRadarSweep'
 
 const SIZE = 340
 const CX = SIZE / 2
@@ -126,7 +126,15 @@ function BlipVisual({ x, y, isActive, intensity, label }) {
 }
 
 function RadarSvg({ active, onNavigate }) {
-  const { getIntensity } = useRadarSweep(22, 3000)
+  const sweepGroupRef = useRef(null)
+  const { getIntensity } = useRadarSweep({
+    blipCount: navLinks.length,
+    trailDeg: SWEEP_TRAIL_DEG,
+    fadeDurationMs: 1600,
+    sweepGroupRef,
+    cx: CX,
+    cy: CY,
+  })
   const total = navLinks.length
 
   const handleBlipClick = (id) => (e) => {
@@ -134,7 +142,13 @@ function RadarSvg({ active, onNavigate }) {
     onNavigate?.(id)
   }
 
-  const gradId = useMemo(() => `sweepGrad-${Math.random().toString(36).slice(2, 9)}`, [])
+  const trailId = useMemo(() => `sweepGrad-${Math.random().toString(36).slice(2, 9)}`, [])
+  const trailPath = useMemo(() => sweepTrailPath(CX, CY, RING_R, SWEEP_TRAIL_DEG), [])
+  const trailEnd = useMemo(() => {
+    const rad = (SWEEP_TRAIL_DEG * Math.PI) / 180
+    const a1 = -Math.PI / 2 - rad
+    return { x: CX + RING_R * Math.cos(a1), y: CY + RING_R * Math.sin(a1) }
+  }, [])
 
   return (
     <svg
@@ -143,9 +157,17 @@ function RadarSvg({ active, onNavigate }) {
       style={{ filter: 'drop-shadow(0 0 24px rgba(61, 232, 255, 0.2))' }}
     >
       <defs>
-        <linearGradient id={gradId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="rgba(107, 255, 184, 0)" />
-          <stop offset="100%" stopColor="rgba(107, 255, 184, 0.5)" />
+        <linearGradient
+          id={trailId}
+          gradientUnits="userSpaceOnUse"
+          x1={CX}
+          y1={CY - RING_R}
+          x2={trailEnd.x}
+          y2={trailEnd.y}
+        >
+          <stop offset="0%" stopColor="rgba(107, 255, 184, 0.7)" />
+          <stop offset="40%" stopColor="rgba(107, 255, 184, 0.25)" />
+          <stop offset="100%" stopColor="rgba(107, 255, 184, 0)" />
         </linearGradient>
       </defs>
 
@@ -164,21 +186,9 @@ function RadarSvg({ active, onNavigate }) {
       <line x1={CX} y1={CY - RING_R} x2={CX} y2={CY + RING_R} stroke="rgba(61,232,255,0.1)" strokeWidth="1" />
       <line x1={CX - RING_R} y1={CY} x2={CX + RING_R} y2={CY} stroke="rgba(61,232,255,0.1)" strokeWidth="1" />
 
-      <g className="radar-sweep-group">
-        <path
-          d={`M ${CX} ${CY} L ${CX} ${CY - RING_R} A ${RING_R} ${RING_R} 0 0 1 ${CX + RING_R * 0.12} ${CY - RING_R * 0.99} Z`}
-          fill={`url(#${gradId})`}
-          opacity="0.7"
-        />
-        <line x1={CX} y1={CY} x2={CX} y2={CY - RING_R} stroke="rgba(92, 255, 155, 0.75)" strokeWidth="2" />
-        <animateTransform
-          attributeName="transform"
-          type="rotate"
-          from={`0 ${CX} ${CY}`}
-          to={`360 ${CX} ${CY}`}
-          dur={`${SWEEP_DURATION_S}s`}
-          repeatCount="indefinite"
-        />
+      <g ref={sweepGroupRef} className="radar-sweep-group">
+        <path d={trailPath} fill={`url(#${trailId})`} opacity="0.85" />
+        <line x1={CX} y1={CY} x2={CX} y2={CY - RING_R} stroke="rgba(92, 255, 155, 0.85)" strokeWidth="2" />
       </g>
 
       <g opacity="0.25">
@@ -207,7 +217,7 @@ function RadarSvg({ active, onNavigate }) {
       {navLinks.map((link, i) => {
         const { x, y } = blipPosition(i, total)
         const isActive = active === link.id
-        const intensity = getIntensity(i, total)
+        const intensity = getIntensity(i)
 
         return (
           <g

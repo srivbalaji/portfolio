@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { profile } from '../data/resume'
 import SectorHub from './SectorHub'
 
-export default function Hero({ embedded, onNavigate }) {
+export default function Hero({ embedded, onNavigate, onOpenMinigame }) {
   const [selectedId, setSelectedId] = useState('hero')
 
   const handleEngage = (id) => {
@@ -102,6 +102,20 @@ export default function Hero({ embedded, onNavigate }) {
                 onSelect={setSelectedId}
                 onEngage={handleEngage}
               />
+              {onOpenMinigame && (
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => onOpenMinigame()}
+                    className="px-4 py-2 font-mono text-[10px] tracking-[0.22em] border border-gundam/45 text-gundam/90 hover:bg-gundam/10 hover:border-gundam hover:text-ice transition-colors"
+                  >
+                    ▸ COMBAT SIM
+                  </button>
+                  <span className="font-mono text-[9px] text-ice/35 tracking-wide">
+                    Optional · flight combat minigame
+                  </span>
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -114,10 +128,10 @@ export default function Hero({ embedded, onNavigate }) {
             >
               <button
                 type="button"
-                onClick={() => onNavigate?.('projects')}
+                onClick={() => onNavigate?.('work')}
                 className="px-6 py-2.5 font-mono text-xs tracking-widest bg-cyan text-void hover:bg-ice transition-colors"
               >
-                VIEW PROJECTS
+                VIEW PROJECTS & EXPERIENCE
               </button>
               <a
                 href={profile.linkedin}

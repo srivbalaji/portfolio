@@ -37,7 +37,12 @@ export default function ProjectCard({ project, index }) {
       </motion.div>
 
       <motion.div className="p-6">
-        <h3 className="font-display text-xl text-ice mb-2 tracking-wide">{project.title}</h3>
+        <div className="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+          <h3 className="font-display text-xl text-ice tracking-wide">{project.title}</h3>
+          {project.period && (
+            <span className="hud-text text-ice/45 shrink-0">{project.period}</span>
+          )}
+        </div>
         <p className="text-ice/70 text-sm leading-relaxed mb-4">{project.description}</p>
         {project.url && (
           <a

@@ -1,8 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { navLinks } from '../../data/resume'
+import {
+  navLinks,
+  resolveWorkEntry,
+  relatedSelectionsForSkill,
+  skillSelectionKey,
+  experience,
+  projects,
+} from '../../data/resume'
 import { ROOM_LAYOUTS } from '../../config/sectionRooms'
 import SectionAuxPanels from './SectionAuxPanels'
 import { HoloPanel } from '../HoloTransmission'
+import InterestGallery from '../InterestGallery'
+import WorkBayDetail from '../WorkBayDetail'
 
 /** Semi-transparent cockpit interior overlaid on the Gundam viewport (right panel) */
 export default function CockpitViewportOverlay({
@@ -16,12 +25,43 @@ export default function CockpitViewportOverlay({
   holoChannel,
   onHoloClose,
   onHoloOpen,
+  aboutInterestChecked,
+  onToggleAboutInterest,
+  selectedWork,
+  onSelectWork,
+  selectedSkill,
+  onSelectSkillRelated,
 }) {
   const layout = ROOM_LAYOUTS[sectionId] ?? ROOM_LAYOUTS.hero
   const meta = navLinks.find((l) => l.id === sectionId)
   const showHolo = sectionId === 'contact' && holoChannel
+  const showAboutArchive = sectionId === 'about' && aboutInterestChecked
+  const showWorkBay = sectionId === 'work' || sectionId === 'experience' || sectionId === 'projects'
+  const showSkillHolo = sectionId === 'skills'
+  const workEntry = showWorkBay || showSkillHolo ? resolveWorkEntry(selectedWork) : null
+  const skillRelated = showSkillHolo && selectedSkill ? relatedSelectionsForSkill(selectedSkill) : []
+  const bayLayout = showWorkBay || showSkillHolo
 
   if (sectionId === 'hero') return null
+
+  const gridClass = [
+    'viewport-cockpit-grid flex-1 min-h-0',
+    bayLayout ? 'work-bay-layout' : '',
+    showHolo ? 'contact-holo-layout contact-holo-compact' : '',
+    showAboutArchive ? 'about-holo-layout' : '',
+    compact && !showHolo && !showAboutArchive && !bayLayout ? 'hidden' : '',
+    compact && showAboutArchive ? 'about-holo-compact' : '',
+    compact && bayLayout ? 'work-bay-compact' : '',
+    showHolo && holoChannel === 'RESUME' ? 'contact-holo-resume' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  const primaryLabel = showHolo
+    ? 'HOLO TRANSMISSION'
+    : showSkillHolo && selectedSkill
+      ? `LINK · ${selectedSkill}`
+      : layout.primaryLabel
 
   return (
     <motion.div
@@ -55,7 +95,7 @@ export default function CockpitViewportOverlay({
       <motion.div
         className={`relative z-10 h-full flex flex-col pointer-events-auto ${compact ? 'p-2' : 'p-3 md:p-4'}`}
         initial={false}
-        animate={{ opacity: visible ? 0.88 : 0, y: visible ? 0 : 12 }}
+        animate={{ opacity: visible ? 0.92 : 0, y: visible ? 0 : 12 }}
         transition={{ duration: 0.5, delay: visible ? 0.1 : 0 }}
       >
         {!compact && (
@@ -69,19 +109,21 @@ export default function CockpitViewportOverlay({
           </div>
         )}
 
-        <div
-          className={`viewport-cockpit-grid flex-1 min-h-0 ${sectionId === 'experience' ? 'experience-layout' : ''} ${showHolo ? 'contact-holo-layout contact-holo-compact' : ''} ${compact && !showHolo ? 'hidden' : ''}`}
-        >
+        <div className={gridClass}>
           <motion.div
-            className={`cockpit-monitor primary viewport-primary ${sectionId === 'experience' ? 'experience-primary' : ''} ${showHolo ? 'contact-holo-primary' : ''}`}
+            className={`cockpit-monitor primary viewport-primary ${showHolo ? 'contact-holo-primary' : ''} ${
+              showAboutArchive ? 'about-holo-primary' : ''
+            } ${bayLayout ? 'work-bay-primary' : ''}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: visible ? 1 : 0 }}
             transition={{ delay: 0.2 }}
           >
-            <p className="monitor-label text-cyan/70">
-              {showHolo ? 'HOLO TRANSMISSION' : layout.primaryLabel}
-            </p>
-            <div className={`monitor-screen aux-screen flex flex-col ${showHolo ? 'min-h-[120px] p-2' : 'items-center justify-center'}`}>
+            <p className="monitor-label text-cyan/70">{primaryLabel}</p>
+            <div
+              className={`monitor-screen aux-screen flex flex-col min-h-0 ${
+                showHolo || showAboutArchive || bayLayout ? 'flex-1 p-2' : 'items-center justify-center'
+              }`}
+            >
               <AnimatePresence mode="wait">
                 {showHolo ? (
                   <HoloPanel
@@ -91,10 +133,81 @@ export default function CockpitViewportOverlay({
                     onOpen={onHoloOpen}
                     compact
                   />
+                ) : showAboutArchive ? (
+                  <motion.div
+                    key="about-archive"
+                    className="flex-1 min-h-0 w-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <InterestGallery
+                      checked={aboutInterestChecked}
+                      onToggle={onToggleAboutInterest}
+                      variant="cockpit"
+                    />
+                  </motion.div>
+                ) : showSkillHolo ? (
+                  <motion.div
+                    key={`skill-holo-${selectedSkill || 'idle'}`}
+                    className="flex-1 min-h-0 w-full flex flex-col"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    {!selectedSkill ? (
+                      <div className="h-full flex flex-col items-center justify-center gap-2 px-3 text-center">
+                        <p className="font-mono text-[9px] tracking-[0.22em] text-cyan/50 uppercase">
+                          Awaiting skill link
+                        </p>
+                        <p className="font-mono text-[8px] text-ice/40 leading-relaxed max-w-[16rem]">
+                          Tap a skill on the left to project related experience or projects here.
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {skillRelated.length > 1 && (
+                          <div className="flex flex-wrap gap-1 mb-1.5 shrink-0">
+                            {skillRelated.map((sel) => {
+                              const active = skillSelectionKey(sel) === skillSelectionKey(selectedWork)
+                              const label = shortRelatedLabel(sel)
+                              return (
+                                <button
+                                  key={skillSelectionKey(sel)}
+                                  type="button"
+                                  onClick={() => onSelectSkillRelated?.(sel)}
+                                  className={`font-mono text-[7px] tracking-wide px-1.5 py-0.5 border transition-colors truncate max-w-[7.5rem] ${
+                                    active
+                                      ? 'border-cyan/60 text-cyan bg-cyan/15'
+                                      : 'border-ice/20 text-ice/50 hover:border-cyan/40 hover:text-cyan/80'
+                                  }`}
+                                >
+                                  {label}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        )}
+                        <div className="flex-1 min-h-0">
+                          <WorkBayDetail entry={workEntry} />
+                        </div>
+                      </>
+                    )}
+                  </motion.div>
+                ) : showWorkBay ? (
+                  <motion.div
+                    key="work-bay"
+                    className="flex-1 min-h-0 w-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <WorkBayDetail entry={workEntry} />
+                  </motion.div>
                 ) : (
                   <motion.p
                     key="ext-view"
-                    className={`font-mono text-ice/50 text-center px-2 ${sectionId === 'experience' ? 'text-[8px] leading-tight' : 'text-[10px] md:text-xs'}`}
+                    className="font-mono text-ice/50 text-center px-2 text-[10px] md:text-xs"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -106,18 +219,36 @@ export default function CockpitViewportOverlay({
             </div>
           </motion.div>
 
-          <div className={`viewport-aux-grid ${sectionId === 'experience' ? 'experience-aux' : ''} ${compact ? 'hidden' : ''}`}>
-            <SectionAuxPanels
-              sectionId={sectionId}
-              layout={layout}
-              onNavigate={onNavigate}
-              onScrollToExperience={onScrollToExperience}
-              activeExperienceId={activeExperienceId}
-              onActiveExperienceChange={onActiveExperienceChange}
-            />
-          </div>
+          {!showHolo && !showAboutArchive && !(compact && bayLayout) && (
+            <div className={`viewport-aux-grid ${bayLayout ? 'work-bay-aux' : ''} ${compact ? 'hidden' : ''}`}>
+              <SectionAuxPanels
+                sectionId={sectionId}
+                layout={layout}
+                onNavigate={onNavigate}
+                onScrollToExperience={onScrollToExperience}
+                activeExperienceId={activeExperienceId}
+                onActiveExperienceChange={onActiveExperienceChange}
+                onSelectWork={onSelectWork}
+                selectedWork={selectedWork}
+              />
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
   )
+}
+
+function shortRelatedLabel(sel) {
+  if (sel.kind === 'experience') {
+    const job = experience.find((e) => e.id === sel.id)
+    if (!job) return sel.id
+    if (sel.subsectionId) {
+      const sub = job.subsections?.find((s) => s.id === sel.subsectionId)
+      return sub?.title || job.org
+    }
+    return job.org
+  }
+  const project = projects.find((p) => p.id === sel.id)
+  return project?.title || sel.id
 }

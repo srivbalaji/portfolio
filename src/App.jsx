@@ -14,7 +14,8 @@ export default function App() {
   }, [])
 
   const handleBootNavigate = useCallback((id) => {
-    setInitialSection(id)
+    const next = id === 'projects' || id === 'experience' ? 'work' : id
+    setInitialSection(next)
   }, [])
 
   const handleIntroEntryDone = useCallback(() => {

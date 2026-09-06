@@ -7,11 +7,10 @@ import HudDriftFeed from './HudDriftFeed'
 import CockpitViewportOverlay from './cockpit/CockpitViewportOverlay'
 import Hero from './Hero'
 import About from './About'
-import Projects from './Projects'
-import Experience from './Experience'
+import Work from './Work'
 import Skills from './Skills'
 import Contact from './Contact'
-import { navLinks, profile, experience } from '../data/resume'
+import { navLinks, profile, experience, relatedSelectionsForSkill } from '../data/resume'
 import { CAMERA_NAV_DELAY_MS, CAMERA_TURN_MS } from '../config/mechModel'
 import { useCompactViewport, useFinePointer } from '../hooks/useCompactViewport'
 import MobileMechSplitHandle, { useMobileMechSplit } from './MobileMechSplit'
@@ -19,8 +18,10 @@ import MobileMechSplitHandle, { useMobileMechSplit } from './MobileMechSplit'
 const SECTIONS = {
   hero: Hero,
   about: About,
-  projects: Projects,
-  experience: Experience,
+  work: Work,
+  // legacy aliases
+  projects: Work,
+  experience: Work,
   skills: Skills,
   contact: Contact,
 }
@@ -32,14 +33,29 @@ const panelVariants = {
 
 const TURN_MS = CAMERA_NAV_DELAY_MS + CAMERA_TURN_MS
 
-export default function PortfolioShell({ initialSection = 'hero', entryFromIntro = false, onIntroEntryDone }) {
-  const [active, setActive] = useState(initialSection)
+export default function PortfolioShell({
+  initialSection = 'hero',
+  entryFromIntro = false,
+  onIntroEntryDone,
+}) {
+  const normalizedInitial =
+    initialSection === 'projects' || initialSection === 'experience' ? 'work' : initialSection
+  const [active, setActive] = useState(normalizedInitial)
   const [direction, setDirection] = useState(0)
   const [overlayVisible, setOverlayVisible] = useState(false)
   const timerRef = useRef(null)
   const [activeExperienceId, setActiveExperienceId] = useState(experience[0]?.id ?? null)
   const [holoChannel, setHoloChannel] = useState(null)
   const [holoHref, setHoloHref] = useState(null)
+  const [aboutInterestChecked, setAboutInterestChecked] = useState(() =>
+    Object.fromEntries(profile.interests.map((label) => [label, true]))
+  )
+  const [selectedWork, setSelectedWork] = useState({ kind: 'experience', id: experience[0]?.id ?? null })
+  const [selectedSkill, setSelectedSkill] = useState(null)
+
+  const toggleAboutInterest = useCallback((label) => {
+    setAboutInterestChecked((prev) => ({ ...prev, [label]: !prev[label] }))
+  }, [])
 
   const openHoloChannel = useCallback(({ channel, href }) => {
     setHoloChannel(channel)
@@ -74,6 +90,46 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
     timerRef.current = setTimeout(() => setOverlayVisible(true), TURN_MS)
   }, [])
 
+  const selectWork = useCallback(
+    (sel) => {
+      setSelectedWork(sel)
+      if (sel?.kind === 'experience') setActiveExperienceId(sel.id)
+      if (active !== 'work') {
+        const prevIdx = navLinks.findIndex((l) => l.id === active)
+        const nextIdx = navLinks.findIndex((l) => l.id === 'work')
+        setDirection(nextIdx >= prevIdx ? 1 : -1)
+        setActive('work')
+        showOverlayAfterTurn('work')
+      } else {
+        setOverlayVisible(true)
+      }
+    },
+    [active, showOverlayAfterTurn],
+  )
+
+  const selectSkill = useCallback(
+    (skill) => {
+      const related = relatedSelectionsForSkill(skill)
+      setSelectedSkill(skill)
+      if (related[0]) setSelectedWork(related[0])
+      if (active !== 'skills') {
+        const prevIdx = navLinks.findIndex((l) => l.id === active)
+        const nextIdx = navLinks.findIndex((l) => l.id === 'skills')
+        setDirection(nextIdx >= prevIdx ? 1 : -1)
+        setActive('skills')
+        showOverlayAfterTurn('skills')
+      } else {
+        setOverlayVisible(true)
+      }
+    },
+    [active, showOverlayAfterTurn],
+  )
+
+  const selectSkillRelated = useCallback((sel) => {
+    setSelectedWork(sel)
+    setOverlayVisible(true)
+  }, [])
+
   useEffect(() => {
     showOverlayAfterTurn(initialSection)
     return () => {
@@ -89,12 +145,13 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
       }
 
       setActiveExperienceId(jobId)
-      if (active !== 'experience') {
+      setSelectedWork({ kind: 'experience', id: jobId })
+      if (active !== 'work') {
         const prevIdx = navLinks.findIndex((l) => l.id === active)
-        const nextIdx = navLinks.findIndex((l) => l.id === 'experience')
+        const nextIdx = navLinks.findIndex((l) => l.id === 'work')
         setDirection(nextIdx >= prevIdx ? 1 : -1)
-        setActive('experience')
-        showOverlayAfterTurn('experience')
+        setActive('work')
+        showOverlayAfterTurn('work')
         window.setTimeout(scrollToEl, 480)
       } else {
         scrollToEl()
@@ -105,13 +162,14 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
 
   const navigate = useCallback(
     (id) => {
-      if (id === active) return
-      if (id !== 'contact') closeHoloChannel()
+      const target = id === 'projects' || id === 'experience' ? 'work' : id
+      if (target === active) return
+      if (target !== 'contact') closeHoloChannel()
       const prevIdx = navLinks.findIndex((l) => l.id === active)
-      const nextIdx = navLinks.findIndex((l) => l.id === id)
+      const nextIdx = navLinks.findIndex((l) => l.id === target)
       setDirection(nextIdx >= prevIdx ? 1 : -1)
-      setActive(id)
-      showOverlayAfterTurn(id)
+      setActive(target)
+      showOverlayAfterTurn(target)
     },
     [active, showOverlayAfterTurn, closeHoloChannel],
   )
@@ -124,7 +182,11 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
   const showViewportOverlay =
     overlayVisible &&
     active !== 'hero' &&
-    (!isCompact || (active === 'contact' && holoChannel))
+    (!isCompact ||
+      active === 'about' ||
+      active === 'work' ||
+      active === 'skills' ||
+      (active === 'contact' && holoChannel))
 
   return (
     <div className="shell-layout min-h-screen flex flex-col supports-[padding:max(0px)]:pb-[max(0px,env(safe-area-inset-bottom))]">
@@ -136,7 +198,7 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
           <span className="font-display text-base sm:text-lg md:text-xl text-ice tracking-wider truncate">{profile.name.split(' ')[0]}</span>
           <span className="hidden sm:inline font-mono text-[9px] text-gundam/50 tracking-[0.25em]">PILOT · UM-AA</span>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[9px] text-cyan/50 lg:pr-[9.5rem] shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 font-mono text-[9px] text-cyan/50 lg:pr-[9.5rem] shrink-0">
           <span className="text-gundam animate-pulse">●</span>
           <span>{activeMeta?.label ?? 'Home'}</span>
         </div>
@@ -181,7 +243,17 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
                   transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
                   className="max-w-2xl"
                 >
-                  <ActiveSection embedded onNavigate={navigate} onOpenHolo={openHoloChannel} />
+                  <ActiveSection
+                    embedded
+                    onNavigate={navigate}
+                    onOpenHolo={openHoloChannel}
+                    interestChecked={aboutInterestChecked}
+                    onToggleInterest={toggleAboutInterest}
+                    selectedWork={selectedWork}
+                    onSelectWork={selectWork}
+                    selectedSkill={selectedSkill}
+                    onSelectSkill={selectSkill}
+                  />
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -228,6 +300,12 @@ export default function PortfolioShell({ initialSection = 'hero', entryFromIntro
             holoChannel={active === 'contact' ? holoChannel : null}
             onHoloClose={closeHoloChannel}
             onHoloOpen={followHoloChannel}
+            aboutInterestChecked={aboutInterestChecked}
+            onToggleAboutInterest={toggleAboutInterest}
+            selectedWork={selectedWork}
+            onSelectWork={selectWork}
+            selectedSkill={selectedSkill}
+            onSelectSkillRelated={selectSkillRelated}
           />
           {isCompact && <SectionRadar active={active} onNavigate={navigate} dock />}
           <div className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 left-2 sm:left-3 z-30 flex justify-between items-end pointer-events-none gap-2">

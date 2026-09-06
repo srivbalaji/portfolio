@@ -9,9 +9,9 @@ export const ROOM_LAYOUTS = {
   },
   about: {
     roomTitle: 'PROFILE BAY',
-    primaryLabel: 'BIOGRAPHICAL DATA',
+    primaryLabel: 'HOLO ARCHIVE',
     accent: 'gold',
-    aux: ['education', 'interests'],
+    aux: [],
   },
   projects: {
     roomTitle: 'MISSION BAY',
@@ -25,9 +25,15 @@ export const ROOM_LAYOUTS = {
     accent: 'crimson',
     aux: ['roles', 'timeline'],
   },
+  work: {
+    roomTitle: 'DEPLOYMENT BAY',
+    primaryLabel: 'SELECTED ENTRY',
+    accent: 'crimson',
+    aux: ['timeline'],
+  },
   skills: {
     roomTitle: 'SYSTEMS DECK',
-    primaryLabel: 'SKILL DIAGNOSTICS',
+    primaryLabel: 'SKILL HOLOGRAM',
     accent: 'cyan',
     aux: ['languages', 'hardware'],
   },

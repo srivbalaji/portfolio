@@ -7,10 +7,9 @@ const sectors = navLinks
 const MAP_SECTORS = [
   { id: 'hero', label: 'HOME', code: 'A-01', x: 138, y: 6 },
   { id: 'about', label: 'PROFILE', code: 'B-02', x: 18, y: 48 },
-  { id: 'projects', label: 'MISSIONS', code: 'C-03', x: 258, y: 48 },
-  { id: 'experience', label: 'LOG', code: 'D-04', x: 18, y: 132 },
-  { id: 'skills', label: 'SYSTEM', code: 'E-05', x: 258, y: 132 },
-  { id: 'contact', label: 'LINK', code: 'F-06', x: 138, y: 152 },
+  { id: 'work', label: 'P&E', code: 'C-03', x: 258, y: 48 },
+  { id: 'skills', label: 'SYSTEMS', code: 'D-04', x: 18, y: 132 },
+  { id: 'contact', label: 'LINK', code: 'F-06', x: 258, y: 132 },
 ]
 
 const MAP_CENTER = { x: 160, y: 108 }
