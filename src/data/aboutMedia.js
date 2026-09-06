@@ -57,7 +57,7 @@ export const aboutMedia = [
     src: '/assets/about/life-dog.png',
     interest: 'Friends & downtime',
     alt: 'Tri-color dog sitting on a navy couch',
-    caption: 'Lil sis',
+    caption: 'My niece',
   },
   {
     id: 'poker',

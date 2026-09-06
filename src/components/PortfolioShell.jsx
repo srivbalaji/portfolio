@@ -11,6 +11,7 @@ import Work from './Work'
 import Skills from './Skills'
 import Contact from './Contact'
 import { navLinks, profile, experience, relatedSelectionsForSkill } from '../data/resume'
+import { aboutMedia } from '../data/aboutMedia'
 import { CAMERA_NAV_DELAY_MS, CAMERA_TURN_MS } from '../config/mechModel'
 import { useCompactViewport, useFinePointer } from '../hooks/useCompactViewport'
 import MobileMechSplitHandle, { useMobileMechSplit } from './MobileMechSplit'
@@ -50,12 +51,57 @@ export default function PortfolioShell({
   const [aboutInterestChecked, setAboutInterestChecked] = useState(() =>
     Object.fromEntries(profile.interests.map((label) => [label, true]))
   )
+  /** Per-frame override: true = force on, false = force off, missing = follow interest checkbox */
+  const [aboutFrameOverride, setAboutFrameOverride] = useState({})
   const [selectedWork, setSelectedWork] = useState({ kind: 'experience', id: experience[0]?.id ?? null })
   const [selectedSkill, setSelectedSkill] = useState(null)
 
-  const toggleAboutInterest = useCallback((label) => {
-    setAboutInterestChecked((prev) => ({ ...prev, [label]: !prev[label] }))
+  const clearFrameOverridesForInterest = useCallback((label) => {
+    setAboutFrameOverride((prev) => {
+      const next = { ...prev }
+      aboutMedia.forEach((item) => {
+        if (item.interest === label) delete next[item.id]
+      })
+      return next
+    })
   }, [])
+
+  const toggleAboutInterest = useCallback(
+    (label) => {
+      setAboutInterestChecked((prev) => {
+        const nextOn = !prev[label]
+        // Checking on: clear overrides so frames follow interest (all lit).
+        //   Manually-on frames were already lit → look unchanged.
+        // Unchecking: clear overrides so everything dims (including manual ons).
+        clearFrameOverridesForInterest(label)
+        return { ...prev, [label]: nextOn }
+      })
+    },
+    [clearFrameOverridesForInterest],
+  )
+
+  const toggleAboutFrame = useCallback(
+    (frameId) => {
+      const item = aboutMedia.find((m) => m.id === frameId)
+      if (!item) return
+      const interestOn = aboutInterestChecked[item.interest] !== false
+      setAboutFrameOverride((prev) => {
+        const override = prev[frameId]
+        const powered = override === true || (interestOn && override !== false)
+        const next = { ...prev }
+        if (powered) {
+          // Dim this frame only
+          if (!interestOn && override === true) delete next[frameId]
+          else next[frameId] = false
+        } else {
+          // Light this frame only (works even when interest is unchecked)
+          next[frameId] = true
+        }
+        return next
+      })
+    },
+    [aboutInterestChecked],
+  )
 
   const openHoloChannel = useCallback(({ channel, href }) => {
     setHoloChannel(channel)
@@ -301,7 +347,9 @@ export default function PortfolioShell({
             onHoloClose={closeHoloChannel}
             onHoloOpen={followHoloChannel}
             aboutInterestChecked={aboutInterestChecked}
+            aboutFrameOverride={aboutFrameOverride}
             onToggleAboutInterest={toggleAboutInterest}
+            onToggleAboutFrame={toggleAboutFrame}
             selectedWork={selectedWork}
             onSelectWork={selectWork}
             selectedSkill={selectedSkill}

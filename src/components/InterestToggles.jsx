@@ -61,7 +61,8 @@ export default function InterestToggles({ interests, checked, onToggle }) {
         })}
       </ul>
       <p className="mt-4 text-xs text-ice/40 font-ui tracking-wide">
-        Toggle an interest to dim its hologram feed — never fully offline.
+        Uncheck an interest to dim its feed — you can still tap a frame to light it. Re-check leaves
+        already-lit frames alone; uncheck dims them again. PWR badges toggle frames one at a time.
       </p>
     </div>
   )

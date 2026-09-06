@@ -2,11 +2,18 @@ import { motion } from 'framer-motion'
 import { aboutMedia } from '../data/aboutMedia'
 
 /**
- * Interest photo holograms — full power when interest is on,
- * greyscale / dimmed (low power) when toggled off. Never fully hidden.
- * variant="cockpit" fills the right viewport primary monitor.
+ * Interest photo holograms — per-frame PWR with interest checkboxes as category default.
+ * - Interest on + no override → lit; interest off + no override → dim
+ * - Frame click forces that photo on/off even when the interest is unchecked
+ * - Checking an interest clears overrides (feed returns to all lit; already-lit frames look unchanged)
+ * - Unchecking clears overrides (everything dims, including manually lit frames)
  */
-export default function InterestGallery({ checked, onToggle, variant = 'panel' }) {
+export default function InterestGallery({
+  checked,
+  frameOverride = {},
+  onToggleFrame,
+  variant = 'panel',
+}) {
   const isCockpit = variant === 'cockpit'
 
   return (
@@ -28,7 +35,10 @@ export default function InterestGallery({ checked, onToggle, variant = 'panel' }
         }`}
       >
         {aboutMedia.map((item, i) => {
-          const powered = checked[item.interest] !== false
+          const interestOn = checked[item.interest] !== false
+          const override = frameOverride[item.id]
+          const powered = override === true || (interestOn && override !== false)
+
           return (
             <motion.figure
               key={item.id}
@@ -38,15 +48,16 @@ export default function InterestGallery({ checked, onToggle, variant = 'panel' }
               transition={{ delay: Math.min(i * 0.03, 0.4) }}
               className="relative group overflow-hidden border border-cyan/15 bg-void/60 aspect-[4/3] cursor-pointer"
               title={`${item.caption} · tap to ${powered ? 'dim' : 'restore'}`}
-              onClick={() => onToggle?.(item.interest)}
+              onClick={() => onToggleFrame?.(item.id)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
-                  onToggle?.(item.interest)
+                  onToggleFrame?.(item.id)
                 }
               }}
               role="button"
               tabIndex={0}
+              aria-pressed={powered}
             >
               <img
                 src={item.src}

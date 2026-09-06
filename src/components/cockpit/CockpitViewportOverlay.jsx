@@ -26,7 +26,9 @@ export default function CockpitViewportOverlay({
   onHoloClose,
   onHoloOpen,
   aboutInterestChecked,
+  aboutFrameOverride,
   onToggleAboutInterest,
+  onToggleAboutFrame,
   selectedWork,
   onSelectWork,
   selectedSkill,
@@ -143,7 +145,8 @@ export default function CockpitViewportOverlay({
                   >
                     <InterestGallery
                       checked={aboutInterestChecked}
-                      onToggle={onToggleAboutInterest}
+                      frameOverride={aboutFrameOverride}
+                      onToggleFrame={onToggleAboutFrame}
                       variant="cockpit"
                     />
                   </motion.div>

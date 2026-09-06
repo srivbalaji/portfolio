@@ -56,20 +56,6 @@ export const education = {
 
 export const experience = [
   {
-    id: 'nadir',
-    title: 'Co-Founder & CEO',
-    org: 'Nadir AI',
-    location: 'Ann Arbor, MI',
-    period: 'Feb 2026 – Present',
-    logo: '/assets/work/logos/nadir.png',
-    url: 'https://nadirai.net',
-    points: [
-      'Building ADAS telemetry for commercial fleets — post-repair health monitoring that runs in shadow mode on existing telematics feeds',
-      'Owning product roadmap, design, hardware validation, pilot structure, and growth',
-      'Scoping shadow-mode pilots with fleets and repair networks; more at nadirai.net',
-    ],
-  },
-  {
     id: 'trackonomy',
     title: 'Firmware Engineering Intern',
     org: 'Trackonomy Systems',
@@ -123,6 +109,20 @@ export const experience = [
           },
         ],
       },
+    ],
+  },
+  {
+    id: 'nadir',
+    title: 'Co-Founder & CEO',
+    org: 'Nadir AI',
+    location: 'Ann Arbor, MI',
+    period: 'Feb 2026 – Present',
+    logo: '/assets/work/logos/nadir.png',
+    url: 'https://nadirai.net',
+    points: [
+      'Building ADAS telemetry for commercial fleets — post-repair health monitoring that runs in shadow mode on existing telematics feeds',
+      'Owning product roadmap, design, hardware validation, pilot structure, and growth',
+      'Scoping shadow-mode pilots with fleets and repair networks; more at nadirai.net',
     ],
   },
   {
@@ -363,10 +363,10 @@ export const navLinks = [
  * kind: 'experience' | 'project'
  */
 export const workFeed = [
-  { kind: 'experience', refId: 'nadir' },
   { kind: 'experience', refId: 'trackonomy' },
-  { kind: 'experience', refId: 'atombot' },
   { kind: 'project', refId: 'thread-scheduler' },
+  { kind: 'experience', refId: 'nadir' },
+  { kind: 'experience', refId: 'atombot' },
   { kind: 'experience', refId: 'spark' },
   { kind: 'project', refId: 'spectrum' },
   { kind: 'experience', refId: 'computek' },
