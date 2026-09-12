@@ -88,7 +88,6 @@ export default function Hero({ embedded, onNavigate, onOpenMinigame }) {
             <p className="font-mono text-ice/90 text-sm tracking-wide">
               {profile.subtitle} · GPA {profile.gpa}
             </p>
-            <p className="font-mono text-cyan/60 text-xs mt-1">{profile.graduation}</p>
           </motion.div>
 
           {embedded && (

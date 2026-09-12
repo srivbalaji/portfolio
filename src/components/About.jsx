@@ -52,14 +52,13 @@ export default function About({ embedded, interestChecked, onToggleInterest }) {
           viewport={{ once: true }}
           custom={3}
         >
-          <p className="text-ice/80 leading-relaxed mb-6">
-            I&apos;m a {education.degree} student at {education.school} with a minor in {education.minor}.
-            My work sits at the intersection of firmware, robotics, and systems that have to work under real
-            constraints — power budgets, timing, and hardware that doesn&apos;t forgive mistakes.
+          <p className="text-ice/80 leading-relaxed mb-4">
+            I&apos;m a B.S.E. Computer Science student at University of Michigan with a minor in Mathematics.
           </p>
-          <p className="text-ice/70 leading-relaxed">
-            From swarm robotics at Atombot Lab to high-voltage EV systems at SPARK, I care about building
-            things that are reliable, measurable, and worth deploying.
+          <p className="text-ice/80 leading-relaxed">
+            My work intersects firmware, robotics, computer architecture, and operating systems. From swarm robotics
+            at Atombot Lab to high-voltage EV systems at SPARK, I&apos;ve built things that are measurable, reliable,
+            and worth deploying.
           </p>
         </motion.div>
 

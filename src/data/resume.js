@@ -8,12 +8,12 @@ export const profile = {
   resumeUrl: '/Srivatsan_Balaji_Resume.pdf',
   location: 'Ann Arbor, MI',
   tagline: 'Embedded Systems · Robotics · Firmware',
-  subtitle: 'Computer Engineering @ University of Michigan',
+  subtitle: 'Computer Science @ University of Michigan',
   gpa: '3.9 / 4.0',
-  graduation: 'May 2028',
+  graduation: '',
   minor: 'Mathematics',
   statement:
-    'Building firmware and systems that move in the real world — SoC bring-up, heterogeneous multicore, robotics, and high-voltage embedded controls.',
+    'Building firmware: SoC bring-up, heterogeneous multicore, robotics, and high-voltage embedded controls.',
   interests: [
     'Travel & food',
     'Fantasy novels',
@@ -24,10 +24,10 @@ export const profile = {
 
 export const education = {
   school: 'University of Michigan',
-  degree: 'B.S.E. Computer Engineering',
+  degree: 'B.S.E. Computer Science',
   minor: 'Mathematics',
   location: 'Ann Arbor, MI',
-  graduation: 'May 2028',
+  graduation: '',
   gpa: '3.9/4.0',
   awards: [
     'BPA C++ Programming — 2nd Place (Regional)',

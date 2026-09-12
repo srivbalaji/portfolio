@@ -6,7 +6,6 @@ export default function Contact({ embedded, onOpenHolo }) {
     { label: 'EMAIL', channel: 'EMAIL', href: `mailto:${profile.email}`, icon: '✉' },
     { label: 'LINKEDIN', channel: 'LINKEDIN', href: profile.linkedin, icon: '◉' },
     { label: 'GITHUB', channel: 'GITHUB', href: profile.github, icon: '◇' },
-    { label: 'RESUME', channel: 'RESUME', href: profile.resumeUrl, icon: '▣' },
   ]
 
   return (
@@ -20,7 +19,7 @@ export default function Contact({ embedded, onOpenHolo }) {
         </motion.h2>
 
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-12"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8 sm:mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

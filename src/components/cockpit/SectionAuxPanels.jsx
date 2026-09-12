@@ -26,7 +26,6 @@ function StatusPanel() {
     <div className="space-y-1.5 font-mono text-[9px] md:text-[10px]">
       <p className="text-hud">● ONLINE</p>
       <p className="text-ice/60">GPA {profile.gpa}</p>
-      <p className="text-ice/50">{profile.graduation}</p>
       <p className="text-gundam/70">{profile.tagline.split(' · ')[0]}</p>
     </div>
   )

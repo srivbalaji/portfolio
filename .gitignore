@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Local-only files not served on the site
+private/
+
 # Environment & secrets — never commit tokens or API keys
 .env
 .env.*
