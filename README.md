@@ -4,7 +4,7 @@ Hey — I'm Srivatsan Balaji. This is the source for my personal portfolio.
 
 **Live site:** [https://sbalaji.vercel.app](https://sbalaji.vercel.app)
 
-I'm a Computer Science student at the University of Michigan (Math minor). I work on embedded firmware, robotics, and systems that actually ship — Atombot Lab, SPARK Electric Racing, and Trackonomy.
+I'm a Computer Science student at the University of Michigan (Philosophy minor). I work on embedded firmware, robotics, and systems that actually ship — Atombot Lab, SPARK Electric Racing, and Trackonomy.
 
 The intro uses a **3D mecha model** in the hangar. Default target is **Freedom Gundam** (CC BY, cosmos28 on Sketchfab). The bundled `model.glb` is included in-repo; re-fetch only if you need to refresh it.
 

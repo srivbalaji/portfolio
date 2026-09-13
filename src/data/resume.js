@@ -11,7 +11,7 @@ export const profile = {
   subtitle: 'Computer Science @ University of Michigan',
   gpa: '3.9 / 4.0',
   graduation: '',
-  minor: 'Mathematics',
+  minor: 'Philosophy',
   statement:
     'Building firmware: SoC bring-up, heterogeneous multicore, robotics, and high-voltage embedded controls.',
   interests: [
@@ -25,7 +25,7 @@ export const profile = {
 export const education = {
   school: 'University of Michigan',
   degree: 'B.S.E. Computer Science',
-  minor: 'Mathematics',
+  minor: 'Philosophy',
   location: 'Ann Arbor, MI',
   graduation: '',
   gpa: '3.9/4.0',

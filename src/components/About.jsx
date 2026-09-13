@@ -53,7 +53,7 @@ export default function About({ embedded, interestChecked, onToggleInterest }) {
           custom={3}
         >
           <p className="text-ice/80 leading-relaxed mb-4">
-            I&apos;m a B.S.E. Computer Science student at University of Michigan with a minor in Mathematics.
+            I&apos;m a B.S.E. Computer Science student at University of Michigan with a minor in Philosophy.
           </p>
           <p className="text-ice/80 leading-relaxed">
             My work intersects firmware, robotics, computer architecture, and operating systems. From swarm robotics
