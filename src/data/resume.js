@@ -44,7 +44,7 @@ export const education = {
     'Differential Equations',
   ],
   inProgress: [
-    'EECS 215 — Introduction to Electronic Circuits',
+    'EECS 491 — Intro to Distributed Systems',
     'EECS 370 — Computer Organization',
   ],
   planned: [
